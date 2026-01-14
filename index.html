@@ -55,7 +55,7 @@
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(10, 15, 25, 0.9);
+            background: rgba(10, 15, 25, 0.95);
             backdrop-filter: blur(10px);
             border-radius: 50px;
             padding: 12px 25px;
@@ -65,6 +65,13 @@
             border: 1px solid rgba(0, 217, 255, 0.3);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), var(--neon-glow);
             transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateX(-50%) translateY(-100px);
+        }
+        
+        .floating-dock.visible {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
         }
         
         .dock-tab {
@@ -266,12 +273,11 @@
         
         .skill-node {
             position: absolute;
-            width: 60px;
-            height: 60px;
+            width: 80px;
+            height: 80px;
             background: rgba(10, 15, 25, 0.9);
             border-radius: 50%;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             border: 2px solid;
@@ -280,17 +286,13 @@
             z-index: 2;
             cursor: pointer;
             overflow: hidden;
+            font-size: 2.5rem;
         }
         
         .skill-node:hover {
-            transform: translate(-50%, -50%) scale(1.2);
+            transform: translate(-50%, -50%) scale(1.3);
             box-shadow: var(--neon-glow);
             z-index: 10;
-        }
-        
-        .skill-node i {
-            font-size: 1.3rem;
-            margin-bottom: 5px;
         }
         
         .skill-node.spring { border-color: #6db33f; color: #6db33f; }
@@ -301,11 +303,6 @@
         .skill-node.aws { border-color: #ff9900; color: #ff9900; }
         .skill-node.git { border-color: #f05032; color: #f05032; }
         .skill-node.pytorch { border-color: #ee4c2c; color: #ee4c2c; }
-        
-        .skill-name {
-            font-size: 0.7rem;
-            font-weight: 600;
-        }
         
         /* Skills Section */
         #skills {
@@ -328,7 +325,7 @@
         }
         
         .code-terminal {
-            background-color: rgba(10, 15, 25, 0.9);
+            background-color: rgba(10, 15, 25, 0.95);
             border-radius: 10px;
             border: 1px solid var(--card-border);
             padding: 20px;
@@ -397,6 +394,11 @@
             width: 0;
             animation-fill-mode: forwards;
         }
+        .terminal-line:nth-child(6) { 
+            animation-delay: 1.8s, 2.3s; 
+            width: 0;
+            animation-fill-mode: forwards;
+        }
         
         .terminal-cursor {
             display: inline-block;
@@ -405,6 +407,14 @@
             background-color: var(--primary);
             animation: blink 1s infinite;
             margin-left: 5px;
+        }
+        
+        .terminal-path {
+            color: var(--primary);
+        }
+        
+        .terminal-command {
+            color: var(--secondary);
         }
         
         .skill-category {
@@ -1070,6 +1080,12 @@
             .skills-diagram {
                 height: 350px;
             }
+            
+            .skill-node {
+                width: 70px;
+                height: 70px;
+                font-size: 2rem;
+            }
         }
         
         @media (max-width: 576px) {
@@ -1096,6 +1112,12 @@
             .skills-diagram {
                 height: 300px;
             }
+            
+            .skill-node {
+                width: 60px;
+                height: 60px;
+                font-size: 1.8rem;
+            }
         }
     </style>
 </head>
@@ -1104,7 +1126,7 @@
     <div class="scroll-progress"></div>
     
     <!-- Floating Dock Navigation -->
-    <div class="floating-dock">
+    <div class="floating-dock" id="floatingDock">
         <div class="dock-tab active" onclick="scrollToSection('intro')">Introduction</div>
         <div class="dock-tab" onclick="scrollToSection('skills')">Skills</div>
         <div class="dock-tab" onclick="scrollToSection('experience')">Experience</div>
@@ -1144,45 +1166,37 @@
                     <div class="web-ring"></div>
                     <div class="web-ring"></div>
                     
-                    <!-- Skill Nodes -->
+                    <!-- Skill Nodes (Icons only) -->
                     <div class="skill-node spring" style="top: 50%; left: 50%; transform: translate(-50%, -50%);">
                         <i class="fas fa-leaf"></i>
-                        <span class="skill-name">Spring Boot</span>
                     </div>
                     
                     <div class="skill-node java" style="top: 25%; left: 50%;">
                         <i class="fab fa-java"></i>
-                        <span class="skill-name">Java</span>
                     </div>
                     
                     <div class="skill-node python" style="top: 50%; left: 80%;">
                         <i class="fab fa-python"></i>
-                        <span class="skill-name">Python</span>
                     </div>
                     
                     <div class="skill-node database" style="top: 75%; left: 50%;">
                         <i class="fas fa-database"></i>
-                        <span class="skill-name">PostgreSQL</span>
                     </div>
                     
                     <div class="skill-node docker" style="top: 50%; left: 20%;">
                         <i class="fab fa-docker"></i>
-                        <span class="skill-name">Docker</span>
                     </div>
                     
                     <div class="skill-node aws" style="top: 30%; left: 70%;">
                         <i class="fab fa-aws"></i>
-                        <span class="skill-name">AWS</span>
                     </div>
                     
                     <div class="skill-node git" style="top: 30%; left: 30%;">
                         <i class="fab fa-git-alt"></i>
-                        <span class="skill-name">Git</span>
                     </div>
                     
                     <div class="skill-node pytorch" style="top: 70%; left: 70%;">
                         <i class="fas fa-brain"></i>
-                        <span class="skill-name">PyTorch</span>
                     </div>
                 </div>
             </div>
@@ -1203,14 +1217,16 @@
                         <div class="terminal-dot red"></div>
                         <div class="terminal-dot yellow"></div>
                         <div class="terminal-dot green"></div>
-                        <span style="margin-left: 10px; font-size: 0.9rem;">skills.sh</span>
+                        <span style="margin-left: 10px; font-size: 0.9rem;">backend_systems.sh</span>
                     </div>
                     <div class="terminal-content">
-                        <div class="terminal-line"><span style="color: var(--primary);">$</span> backend_skills</div>
-                        <div class="terminal-line">> Java, Spring Boot, REST APIs</div>
-                        <div class="terminal-line">> Python, PyTorch, Data Processing</div>
-                        <div class="terminal-line">> SQL, PostgreSQL, Database Design</div>
-                        <div class="terminal-line">> Docker, AWS, CI/CD Pipelines</div>
+                        <div class="terminal-line"><span class="terminal-path">~/backend-systems$</span> <span class="terminal-command">status --system-health</span></div>
+                        <div class="terminal-line">✓ API Gateway: Operational (Spring Boot)</div>
+                        <div class="terminal-line">✓ Database Layer: PostgreSQL active</div>
+                        <div class="terminal-line">✓ ML Inference: PyTorch models ready</div>
+                        <div class="terminal-line">✓ Container Runtime: Docker containers running</div>
+                        <div class="terminal-line">✓ Cloud Infrastructure: AWS services connected</div>
+                        <div class="terminal-line"><span class="terminal-path">~/backend-systems$</span> <span class="terminal-cursor"></span></div>
                     </div>
                 </div>
             </div>
@@ -1476,6 +1492,13 @@
         const navDots = document.querySelectorAll('.nav-dot');
         const sections = document.querySelectorAll('.story-section');
         const scrollHint = document.querySelector('.scroll-hint');
+        const floatingDock = document.getElementById('floatingDock');
+        
+        // Variables for dock visibility control
+        let dockVisible = false;
+        let dockTimeout = null;
+        let lastScrollTop = 0;
+        let mouseY = 0;
         
         // Update active navigation based on scroll position
         function updateActiveNav() {
@@ -1520,6 +1543,41 @@
             const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
             const scrolled = (winScroll / height) * 100;
             scrollProgress.style.transform = `scaleX(${scrolled / 100})`;
+        }
+        
+        // Show floating dock
+        function showDock() {
+            if (!dockVisible) {
+                floatingDock.classList.add('visible');
+                dockVisible = true;
+            }
+            
+            // Clear any existing timeout
+            if (dockTimeout) {
+                clearTimeout(dockTimeout);
+            }
+            
+            // Set timeout to hide dock after 3 seconds of inactivity
+            dockTimeout = setTimeout(() => {
+                // Only hide if mouse is not near the top
+                if (mouseY > 100) {
+                    floatingDock.classList.remove('visible');
+                    dockVisible = false;
+                }
+            }, 3000);
+        }
+        
+        // Hide floating dock
+        function hideDock() {
+            // Only hide if scrolling down and mouse is not near top
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > lastScrollTop && mouseY > 100 && scrollTop > 100) {
+                floatingDock.classList.remove('visible');
+                dockVisible = false;
+            }
+            
+            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
         }
         
         // Scroll to section function
@@ -1590,25 +1648,18 @@
             });
         }
         
-        // Make floating dock hide/show on scroll
-        let lastScrollTop = 0;
-        const floatingDock = document.querySelector('.floating-dock');
-        
-        function handleDockVisibility() {
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        // Track mouse position for dock visibility
+        document.addEventListener('mousemove', (e) => {
+            mouseY = e.clientY;
             
-            if (scrollTop > lastScrollTop && scrollTop > 100) {
-                // Scrolling down, hide dock
-                floatingDock.style.transform = 'translateX(-50%) translateY(-100px)';
-                floatingDock.style.opacity = '0';
-            } else {
-                // Scrolling up, show dock
-                floatingDock.style.transform = 'translateX(-50%) translateY(0)';
-                floatingDock.style.opacity = '1';
+            // Show dock when mouse moves near the top
+            if (mouseY < 100) {
+                showDock();
             }
-            
-            lastScrollTop = scrollTop;
-        }
+        });
+        
+        // Show dock on mouse enter
+        floatingDock.addEventListener('mouseenter', showDock);
         
         // Initialize everything when page loads
         window.addEventListener('load', () => {
@@ -1616,12 +1667,15 @@
             initWebDiagram();
             initScrollAnimations();
             updateActiveNav();
+            
+            // Show dock initially
+            setTimeout(showDock, 1000);
         });
         
         // Update on scroll
         window.addEventListener('scroll', () => {
             updateActiveNav();
-            handleDockVisibility();
+            hideDock();
         });
         
         // Smooth scroll for anchor links
