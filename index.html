@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Syed Abubaker Ahmed | Backend Developer Story</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -49,7 +49,7 @@
             font-family: 'JetBrains Mono', monospace;
         }
         
-        /* Floating Dock Navigation */
+        /* Floating Dock Navigation - Desktop Only */
         .floating-dock {
             position: fixed;
             top: 20px;
@@ -102,6 +102,54 @@
         .dock-tab.active:hover {
             background: var(--primary);
             color: var(--dark-bg);
+        }
+        
+        /* Mobile Navigation Bar - Hidden on Desktop */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 15, 25, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(0, 217, 255, 0.3);
+            z-index: 1001;
+            padding: 10px 0;
+        }
+        
+        .mobile-nav-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            padding: 0 10px;
+        }
+        
+        .mobile-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 5px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+        
+        .mobile-nav-item.active {
+            color: var(--primary);
+            background: rgba(0, 217, 255, 0.1);
+        }
+        
+        .mobile-nav-icon {
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+        }
+        
+        .mobile-nav-text {
+            font-size: 0.7rem;
+            font-weight: 500;
         }
         
         /* Storytelling Navigation Dots (Keep for reference but hidden by default) */
@@ -1000,16 +1048,21 @@
             z-index: 1001;
         }
         
-        /* Responsive Design */
+        /* Responsive Design - Mobile Specific */
         @media (max-width: 1100px) {
             .intro-container {
                 grid-template-columns: 1fr;
-                gap: 60px;
+                gap: 40px;
+                text-align: center;
             }
             
             .skills-container {
                 grid-template-columns: 1fr;
-                gap: 40px;
+                gap: 30px;
+            }
+            
+            .skills-visual {
+                height: 300px;
             }
             
             .exp-timeline::before {
@@ -1034,63 +1087,127 @@
             }
             
             .skills-diagram {
-                height: 400px;
+                height: 300px;
+                order: 2;
+                margin-top: 30px;
             }
             
             .floating-dock {
                 display: none;
             }
+            
+            /* Show mobile nav on tablets and phones */
+            .mobile-nav {
+                display: block;
+            }
+            
+            /* Hide desktop nav dots on mobile */
+            .story-nav {
+                display: none;
+            }
+            
+            .intro-content {
+                text-align: center;
+                margin: 0 auto;
+            }
+            
+            .skill-tags {
+                justify-content: center;
+            }
         }
         
         @media (max-width: 768px) {
             .story-section {
-                padding: 0 5%;
+                padding: 20px 5%;
+                min-height: 100vh;
+                height: auto;
+                scroll-snap-align: none;
+                padding-bottom: 80px; /* Space for mobile nav */
+            }
+            
+            html {
+                scroll-snap-type: none; /* Disable scroll snap on mobile */
             }
             
             .intro-name {
-                font-size: 3rem;
+                font-size: 2.5rem;
             }
             
             .intro-tagline {
-                font-size: 1.5rem;
+                font-size: 1.3rem;
             }
             
             .intro-description {
-                font-size: 1.1rem;
+                font-size: 1rem;
+                line-height: 1.6;
             }
             
-            .story-nav {
-                right: 15px;
+            .exp-title, .projects-title, .edu-title, .contact-title {
+                font-size: 2rem;
+                margin-bottom: 40px;
             }
+            
+            .skills-diagram {
+                height: 250px;
+            }
+            
+            .skill-node {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+            
+            .web-ring:nth-child(1) { width: 60px; height: 60px; }
+            .web-ring:nth-child(2) { width: 120px; height: 120px; }
+            .web-ring:nth-child(3) { width: 180px; height: 180px; }
+            .web-ring:nth-child(4) { width: 240px; height: 240px; }
             
             .projects-grid {
                 grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .project-card {
+                margin-bottom: 20px;
             }
             
             .contact-links {
                 flex-direction: column;
                 align-items: center;
-                gap: 30px;
+                gap: 25px;
             }
             
-            .exp-title, .projects-title, .edu-title, .contact-title {
-                font-size: 2.5rem;
+            .contact-link {
+                width: 100%;
+                max-width: 200px;
             }
             
-            .skills-diagram {
-                height: 350px;
+            .edu-card {
+                padding: 25px;
             }
             
-            .skill-node {
-                width: 70px;
-                height: 70px;
-                font-size: 2rem;
+            .job-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            
+            .terminal-content {
+                font-size: 0.8rem;
+            }
+            
+            .scroll-hint {
+                bottom: 80px; /* Above mobile nav */
+            }
+            
+            .mobile-nav-grid {
+                grid-template-columns: repeat(6, 1fr);
             }
         }
         
         @media (max-width: 576px) {
             .intro-name {
-                font-size: 2.5rem;
+                font-size: 2rem;
             }
             
             .exp-timeline::before {
@@ -1100,23 +1217,139 @@
             .timeline-item {
                 width: calc(100% - 60px);
                 left: 60px !important;
+                margin-bottom: 50px;
             }
             
-            .job-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
+            .timeline-content {
+                padding: 20px;
             }
             
-            .web-ring:nth-child(4) { width: 300px; height: 300px; }
+            .timeline-item:nth-child(odd) .timeline-content::before,
+            .timeline-item:nth-child(even) .timeline-content::before {
+                left: -15px;
+                width: 15px;
+            }
+            
+            .timeline-item:nth-child(odd) .timeline-marker,
+            .timeline-item:nth-child(even) .timeline-marker {
+                left: -40px;
+            }
+            
+            .web-ring:nth-child(4) { width: 200px; height: 200px; }
             .skills-diagram {
-                height: 300px;
+                height: 200px;
             }
             
             .skill-node {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+            
+            .terminal-header {
+                padding-bottom: 8px;
+                margin-bottom: 15px;
+            }
+            
+            .terminal-dot {
+                width: 10px;
+                height: 10px;
+            }
+            
+            .skill-tag {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+            
+            .project-header h3 {
+                font-size: 1.3rem;
+            }
+            
+            .project-desc {
+                font-size: 0.9rem;
+            }
+            
+            .project-features li {
+                font-size: 0.85rem;
+                margin-bottom: 10px;
+            }
+            
+            .contact-description {
+                font-size: 1rem;
+                line-height: 1.6;
+            }
+            
+            .btn {
+                padding: 14px 28px;
+                font-size: 0.9rem;
+            }
+            
+            .mobile-nav-text {
+                font-size: 0.65rem;
+            }
+            
+            .mobile-nav-icon {
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 400px) {
+            .intro-name {
+                font-size: 1.8rem;
+            }
+            
+            .intro-tagline {
+                font-size: 1.1rem;
+            }
+            
+            .exp-title, .projects-title, .edu-title, .contact-title {
+                font-size: 1.8rem;
+            }
+            
+            .skills-diagram {
+                height: 180px;
+            }
+            
+            .web-ring:nth-child(1) { width: 50px; height: 50px; }
+            .web-ring:nth-child(2) { width: 100px; height: 100px; }
+            .web-ring:nth-child(3) { width: 150px; height: 150px; }
+            .web-ring:nth-child(4) { width: 180px; height: 180px; }
+            
+            .skill-node {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+            
+            .edu-degree {
+                font-size: 1.1rem;
+            }
+            
+            .edu-description {
+                font-size: 0.95rem;
+            }
+            
+            .contact-link {
+                width: 120px;
+            }
+            
+            .contact-icon {
                 width: 60px;
                 height: 60px;
-                font-size: 1.8rem;
+                font-size: 1.5rem;
+            }
+            
+            .mobile-nav-text {
+                display: none; /* Hide text on very small screens */
+            }
+            
+            .mobile-nav-icon {
+                font-size: 1.3rem;
+                margin-bottom: 0;
+            }
+            
+            .mobile-nav-item {
+                padding: 10px 5px;
             }
         }
     </style>
@@ -1125,7 +1358,7 @@
     <!-- Scroll Progress Indicator -->
     <div class="scroll-progress"></div>
     
-    <!-- Floating Dock Navigation -->
+    <!-- Floating Dock Navigation (Desktop Only) -->
     <div class="floating-dock" id="floatingDock">
         <div class="dock-tab active" onclick="scrollToSection('intro')">Introduction</div>
         <div class="dock-tab" onclick="scrollToSection('skills')">Skills</div>
@@ -1135,7 +1368,37 @@
         <div class="dock-tab" onclick="scrollToSection('contact')">Contact</div>
     </div>
     
-    <!-- Storytelling Navigation Dots -->
+    <!-- Mobile Navigation Bar (Hidden on Desktop) -->
+    <div class="mobile-nav">
+        <div class="mobile-nav-grid">
+            <a href="#intro" class="mobile-nav-item active" onclick="handleMobileNavClick(this, 'intro')">
+                <div class="mobile-nav-icon"><i class="fas fa-home"></i></div>
+                <div class="mobile-nav-text">Intro</div>
+            </a>
+            <a href="#skills" class="mobile-nav-item" onclick="handleMobileNavClick(this, 'skills')">
+                <div class="mobile-nav-icon"><i class="fas fa-code"></i></div>
+                <div class="mobile-nav-text">Skills</div>
+            </a>
+            <a href="#experience" class="mobile-nav-item" onclick="handleMobileNavClick(this, 'experience')">
+                <div class="mobile-nav-icon"><i class="fas fa-briefcase"></i></div>
+                <div class="mobile-nav-text">Exp</div>
+            </a>
+            <a href="#projects" class="mobile-nav-item" onclick="handleMobileNavClick(this, 'projects')">
+                <div class="mobile-nav-icon"><i class="fas fa-project-diagram"></i></div>
+                <div class="mobile-nav-text">Projects</div>
+            </a>
+            <a href="#education" class="mobile-nav-item" onclick="handleMobileNavClick(this, 'education')">
+                <div class="mobile-nav-icon"><i class="fas fa-graduation-cap"></i></div>
+                <div class="mobile-nav-text">Edu</div>
+            </a>
+            <a href="#contact" class="mobile-nav-item" onclick="handleMobileNavClick(this, 'contact')">
+                <div class="mobile-nav-icon"><i class="fas fa-envelope"></i></div>
+                <div class="mobile-nav-text">Contact</div>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Storytelling Navigation Dots (Desktop Only) -->
     <div class="story-nav">
         <div class="nav-dot active" onclick="scrollToSection('intro')"></div>
         <div class="nav-dot" onclick="scrollToSection('skills')"></div>
@@ -1484,12 +1747,18 @@
     
     <!-- JavaScript -->
     <script>
+        // Check if device is mobile
+        function isMobileDevice() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+        }
+        
         // Scroll progress indicator
         const scrollProgress = document.querySelector('.scroll-progress');
         
         // Navigation elements
         const dockTabs = document.querySelectorAll('.dock-tab');
         const navDots = document.querySelectorAll('.nav-dot');
+        const mobileNavItems = document.querySelectorAll('.mobile-nav-item');
         const sections = document.querySelectorAll('.story-section');
         const scrollHint = document.querySelector('.scroll-hint');
         const floatingDock = document.getElementById('floatingDock');
@@ -1514,20 +1783,30 @@
                 }
             });
             
-            // Update dock tabs
-            dockTabs.forEach(tab => {
-                tab.classList.remove('active');
-                if (tab.textContent.toLowerCase().includes(currentSection) || 
-                    (currentSection === 'intro' && tab.textContent === 'Introduction')) {
-                    tab.classList.add('active');
-                }
-            });
+            // Update dock tabs (desktop only)
+            if (!isMobileDevice()) {
+                dockTabs.forEach(tab => {
+                    tab.classList.remove('active');
+                    if (tab.textContent.toLowerCase().includes(currentSection) || 
+                        (currentSection === 'intro' && tab.textContent === 'Introduction')) {
+                        tab.classList.add('active');
+                    }
+                });
+                
+                // Update nav dots (desktop only)
+                navDots.forEach(dot => {
+                    dot.classList.remove('active');
+                    if (dot.getAttribute('onclick').includes(currentSection)) {
+                        dot.classList.add('active');
+                    }
+                });
+            }
             
-            // Update nav dots
-            navDots.forEach(dot => {
-                dot.classList.remove('active');
-                if (dot.getAttribute('onclick').includes(currentSection)) {
-                    dot.classList.add('active');
+            // Update mobile nav items
+            mobileNavItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href') === '#' + currentSection) {
+                    item.classList.add('active');
                 }
             });
             
@@ -1545,8 +1824,10 @@
             scrollProgress.style.transform = `scaleX(${scrolled / 100})`;
         }
         
-        // Show floating dock
+        // Show floating dock (desktop only)
         function showDock() {
+            if (isMobileDevice()) return;
+            
             if (!dockVisible) {
                 floatingDock.classList.add('visible');
                 dockVisible = true;
@@ -1567,8 +1848,10 @@
             }, 3000);
         }
         
-        // Hide floating dock
+        // Hide floating dock (desktop only)
         function hideDock() {
+            if (isMobileDevice()) return;
+            
             // Only hide if scrolling down and mouse is not near top
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
             
@@ -1584,8 +1867,28 @@
         function scrollToSection(sectionId) {
             const section = document.getElementById(sectionId);
             if (section) {
-                section.scrollIntoView({ behavior: 'smooth' });
+                if (isMobileDevice()) {
+                    // Disable smooth scroll on mobile for better control
+                    section.scrollIntoView({ behavior: 'auto' });
+                    // Add offset for mobile nav
+                    window.scrollBy(0, -80);
+                } else {
+                    section.scrollIntoView({ behavior: 'smooth' });
+                }
             }
+        }
+        
+        // Handle mobile nav click
+        function handleMobileNavClick(element, sectionId) {
+            // Update active state
+            mobileNavItems.forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+            
+            // Scroll to section
+            scrollToSection(sectionId);
+            
+            // Prevent default anchor behavior
+            return false;
         }
         
         // Initialize terminal typing effect
@@ -1648,18 +1951,20 @@
             });
         }
         
-        // Track mouse position for dock visibility
-        document.addEventListener('mousemove', (e) => {
-            mouseY = e.clientY;
+        // Track mouse position for dock visibility (desktop only)
+        if (!isMobileDevice()) {
+            document.addEventListener('mousemove', (e) => {
+                mouseY = e.clientY;
+                
+                // Show dock when mouse moves near the top
+                if (mouseY < 100) {
+                    showDock();
+                }
+            });
             
-            // Show dock when mouse moves near the top
-            if (mouseY < 100) {
-                showDock();
-            }
-        });
-        
-        // Show dock on mouse enter
-        floatingDock.addEventListener('mouseenter', showDock);
+            // Show dock on mouse enter
+            floatingDock.addEventListener('mouseenter', showDock);
+        }
         
         // Initialize everything when page loads
         window.addEventListener('load', () => {
@@ -1668,32 +1973,43 @@
             initScrollAnimations();
             updateActiveNav();
             
-            // Show dock initially
-            setTimeout(showDock, 1000);
+            // Show dock initially (desktop only)
+            if (!isMobileDevice()) {
+                setTimeout(showDock, 1000);
+            }
         });
         
         // Update on scroll
         window.addEventListener('scroll', () => {
             updateActiveNav();
-            hideDock();
+            if (!isMobileDevice()) {
+                hideDock();
+            }
         });
         
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    targetElement.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                }
+        // Smooth scroll for anchor links (desktop only)
+        if (!isMobileDevice()) {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
             });
-        });
+        }
+        
+        // Disable hover effects on mobile for better touch experience
+        if (isMobileDevice()) {
+            document.body.classList.add('mobile');
+        }
     </script>
 </body>
 </html>
