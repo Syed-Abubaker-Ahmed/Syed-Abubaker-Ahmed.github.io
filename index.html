@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Syed Abubaker Ahmed | Backend Developer Story</title>
+    <title>Syed Abubaker Ahmed | BackEnd Developer Story</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
@@ -115,7 +115,7 @@
             backdrop-filter: blur(10px);
             border-top: 1px solid rgba(0, 217, 255, 0.3);
             z-index: 1001;
-            padding: 10px 0;
+            padding: 8px 0; /* Changed from 10px 0 to 8px 0 */
         }
         
         .mobile-nav-grid {
@@ -1122,7 +1122,7 @@
                 min-height: 100vh;
                 height: auto;
                 scroll-snap-align: none;
-                padding-bottom: 80px; /* Space for mobile nav */
+                padding-bottom: 100px; /* Changed from 80px to 100px */
             }
             
             html {
@@ -1202,6 +1202,15 @@
             
             .mobile-nav-grid {
                 grid-template-columns: repeat(6, 1fr);
+            }
+            
+            .mobile-nav-item {
+                padding: 6px 5px; /* Changed from 8px 5px to 6px 5px */
+            }
+            
+            .resume-download {
+                margin-top: 60px;
+                margin-bottom: 30px; /* Add this line for extra bottom margin */
             }
         }
         
@@ -1344,12 +1353,12 @@
             }
             
             .mobile-nav-icon {
-                font-size: 1.3rem;
-                margin-bottom: 0;
+                font-size: 1.1rem; /* Slightly reduce icon size */
+                margin-bottom: 2px; /* Reduce margin */
             }
             
             .mobile-nav-item {
-                padding: 10px 5px;
+                padding: 5px 3px; /* Adjust padding for very small screens */
             }
         }
     </style>
@@ -1413,9 +1422,9 @@
         <div class="intro-container">
             <div class="intro-content">
                 <h1 class="intro-name">Syed Abubaker Ahmed</h1>
-                <div class="intro-tagline">Backend Developer & Systems Architect</div>
+                <div class="intro-tagline">BackEnd Developer & Systems Architect</div>
                 <p class="intro-description">
-                    I build scalable backend systems, REST APIs and data-driven solutions with Spring Boot, Python and cloud technologies. 
+                    I build scalable BackEnd systems, REST APIs and data-driven solutions with Spring Boot, Python and cloud technologies. 
                     My focus is on system reliability, performance optimization, and clean architecture for production applications.
                 </p>
             </div>
@@ -1496,7 +1505,7 @@
             
             <div class="skills-content">
                 <div class="skill-category">
-                    <h3>Backend Development</h3>
+                    <h3>BackEnd Development</h3>
                     <div class="skill-tags">
                         <span class="skill-tag">Spring Boot</span>
                         <span class="skill-tag">REST APIs</span>
@@ -1547,13 +1556,13 @@
                     <div class="timeline-marker"></div>
                     <div class="timeline-content">
                         <div class="job-header">
-                            <h3>Backend Support Engineer</h3>
+                            <h3>BackEnd Support Engineer</h3>
                             <div class="job-date">Apr 2025 - Present</div>
                         </div>
                         <span class="company">MINE</span>
                         <p class="job-description">
                             Designing and testing Spring Boot REST APIs with focus on request validation, error handling, and integration.
-                            Debugging and resolving recurring backend and API issues by analyzing logs and stack traces. 
+                            Debugging and resolving recurring BackEnd and API issues by analyzing logs and stack traces. 
                             Collaborating with frontend developers to support integration and feature delivery. 
                         </p>
                         <div class="tech-stack">
@@ -1577,7 +1586,7 @@
                         <p class="job-description">
                             Managing a technical team to build and ship software products. 
                             Overseeing development processes and project planning. 
-                            Leading technical implementation and architecture decisions for scalable backend systems.
+                            Leading technical implementation and architecture decisions for scalable BackEnd systems.
                         </p>
                         <div class="tech-stack">
                             <span class="tech-tag">Team Leadership</span>
@@ -1600,7 +1609,7 @@
                 <div class="project-card">
                     <div class="project-header">
                         <h3>Vehicle Trajectory Prediction</h3>
-                        <p class="project-desc">Backend data processing for short-term vehicle movement prediction with machine learning integration</p>
+                        <p class="project-desc">BackEnd data processing for short-term vehicle movement prediction with machine learning integration</p>
                         <div class="tech-stack">
                             <span class="tech-tag">Python</span>
                             <span class="tech-tag">PyTorch</span>
@@ -1610,8 +1619,8 @@
                     </div>
                     <div class="project-body">
                         <ul class="project-features">
-                            <li>Implemented backend data processing pipelines for movement prediction</li>
-                            <li>Exposed model outputs through backend services (ADE: 1.99m, FDE: 4.43m)</li>
+                            <li>Implemented BackEnd data processing pipelines for movement prediction</li>
+                            <li>Exposed model outputs through BackEnd services (ADE: 1.99m, FDE: 4.43m)</li>
                             <li>Fine-tuned dataset consistency by preprocessing trajectories and reducing noise</li>
                             <li>Outperformed baseline CV (3.55m) and LSTM-ED (2.27m) models</li>
                             <li>Optimized model for lightweight execution while maintaining accuracy</li>
@@ -1628,7 +1637,7 @@
                 <div class="project-card">
                     <div class="project-header">
                         <h3>Crash Detection System</h3>
-                        <p class="project-desc">Backend-driven accident detection pipeline with cloud integration and real-time alerts</p>
+                        <p class="project-desc">BackEnd-driven accident detection pipeline with cloud integration and real-time alerts</p>
                         <div class="tech-stack">
                             <span class="tech-tag">Python</span>
                             <span class="tech-tag">YOLOv8</span>
@@ -1638,8 +1647,8 @@
                     </div>
                     <div class="project-body">
                         <ul class="project-features">
-                            <li>Built backend-driven accident detection pipeline with 97.5% accuracy</li>
-                            <li>Designed backend validation logic with multi-frame confirmation</li>
+                            <li>Built BackEnd-driven accident detection pipeline with 97.5% accuracy</li>
+                            <li>Designed BackEnd validation logic with multi-frame confirmation</li>
                             <li>Reduced false positives to 1.5% with ~0.87 ms/frame inference latency</li>
                             <li>Implemented cloud integrations for incident image upload</li>
                             <li>Triggered automated alerts via WhatsApp, SMS, and call APIs</li>
@@ -1656,7 +1665,7 @@
                 <div class="project-card">
                     <div class="project-header">
                         <h3>API Development Showcase</h3>
-                        <p class="project-desc">Collection of Spring Boot REST APIs demonstrating backend development patterns and best practices</p>
+                        <p class="project-desc">Collection of Spring Boot REST APIs demonstrating BackEnd development patterns and best practices</p>
                         <div class="tech-stack">
                             <span class="tech-tag">Spring Boot</span>
                             <span class="tech-tag">REST APIs</span>
@@ -1696,7 +1705,7 @@
                     <div class="edu-date">2021 - 2025</div>
                 </div>
                 <p class="edu-description">
-                    Focused on computer science fundamentals, software engineering principles, and backend system design. 
+                    Focused on computer science fundamentals, software engineering principles, and BackEnd system design. 
                     Coursework included data structures, algorithms, database systems, distributed computing, and software architecture.
                 </p>
             </div>
@@ -1709,7 +1718,7 @@
             <h2 class="contact-title">Let's Connect</h2>
             
             <p class="contact-description">
-                I'm actively seeking <span style="color: var(--primary); font-weight: 600;">backend and software development roles</span> where I can contribute to building scalable systems, 
+                I'm actively seeking <span style="color: var(--primary); font-weight: 600;">BackEnd and Software Development roles</span> where I can contribute to building scalable systems, 
                 designing robust APIs, and solving complex technical challenges. Open to opportunities that leverage Spring Boot, 
                 cloud technologies, and data-intensive applications.
             </p>
