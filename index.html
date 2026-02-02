@@ -267,7 +267,7 @@
             color: var(--primary);
         }
         
-        /* FIXED: Skills Web Diagram - Perfect Circular Positioning for Desktop */
+        /* Skills Web Diagram - FIXED ALIGNMENT & TOOLTIPS */
         .skills-diagram {
             position: relative;
             height: 500px;
@@ -284,7 +284,7 @@
             margin: 0 auto;
         }
         
-        /* Web rings */
+        /* FIXED: Web rings that go through logo centers */
         .web-ring {
             position: absolute;
             border: 1px solid rgba(0, 217, 255, 0.2);
@@ -294,17 +294,19 @@
             transform: translate(-50%, -50%);
         }
         
+        /* Inner ring - logos will be centered on this ring */
         .web-ring.inner {
             width: 160px;
             height: 160px;
         }
         
+        /* Outer ring - logos will be centered on this ring */
         .web-ring.outer {
             width: 320px;
             height: 320px;
         }
         
-        /* Skill nodes - Perfect circular positioning */
+        /* FIXED: Skill nodes perfectly centered on rings */
         .skill-node {
             position: absolute;
             width: 70px;
@@ -321,6 +323,7 @@
             cursor: pointer;
             overflow: hidden;
             font-size: 2rem;
+            /* Consistent brightness */
             filter: brightness(1.2);
         }
         
@@ -331,7 +334,7 @@
             filter: brightness(1.5);
         }
         
-        /* Skill colors */
+        /* Skill colors with consistent brightness */
         .skill-node.spring { border-color: #6db33f; color: #6db33f; }
         .skill-node.java { border-color: #007396; color: #007396; }
         .skill-node.python { border-color: #306998; color: #306998; }
@@ -705,22 +708,18 @@
         /* Projects Section */
         #projects {
             background: linear-gradient(135deg, #0a1525 0%, #0a0f1a 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
         }
         
         .projects-container {
             width: 100%;
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 60px 0;
         }
         
         .projects-title {
             font-size: 3rem;
             text-align: center;
-            margin-bottom: 80px;
+            margin-bottom: 60px;
             color: var(--text);
             position: relative;
         }
@@ -731,17 +730,16 @@
             width: 100px;
             height: 4px;
             background-color: var(--secondary);
-            bottom: -25px;
+            bottom: -15px;
             left: 50%;
             transform: translateX(-50%);
         }
         
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-            gap: 35px;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
             margin-top: 30px;
-            padding-bottom: 60px;
         }
         
         .project-card {
@@ -777,7 +775,6 @@
             color: var(--secondary);
             margin-bottom: 10px;
             font-size: 1.5rem;
-            line-height: 1.4;
         }
         
         .project-desc {
@@ -819,7 +816,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: auto;
         }
         
         .project-link {
@@ -1013,7 +1009,6 @@
         
         .resume-download {
             margin-top: 60px;
-            margin-bottom: 30px;
         }
         
         .btn {
@@ -1171,11 +1166,6 @@
             .skill-tags {
                 justify-content: center;
             }
-            
-            .projects-grid {
-                grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
-                gap: 25px;
-            }
         }
         
         @media (max-width: 768px) {
@@ -1188,7 +1178,7 @@
             }
             
             html {
-                scroll-snap-type: none;
+                scroll-snap-type: none; /* Disable scroll snap on mobile */
             }
             
             .intro-name {
@@ -1543,64 +1533,64 @@
                 </p>
             </div>
             
-            <!-- FIXED: Skills Web Diagram with Perfect Circular Positioning -->
+            <!-- UPDATED Skills Web Diagram with Tooltips & 4 More Skills -->
             <div class="skills-diagram">
                 <div class="diagram-container">
                     <!-- Web rings that go through logo centers -->
                     <div class="web-ring inner"></div>
                     <div class="web-ring outer"></div>
                     
-                    <!-- FIXED: 9 Skill Nodes with PERFECT Circular Positioning -->
-                    <!-- Spring Boot (Center) -->
+                    <!-- 9 Skill Nodes with Tooltips -->
+                    <!-- Spring Boot (Center, on inner ring) -->
                     <div class="skill-node spring" style="top: 50%; left: 50%;">
                         <i class="fas fa-leaf"></i>
                         <div class="skill-tooltip">Spring Boot</div>
                     </div>
                     
-                    <!-- Java (Top) - Perfectly centered on outer ring -->
-                    <div class="skill-node java" style="top: 14%; left: 50%;">
+                    <!-- Java (Top, on outer ring) -->
+                    <div class="skill-node java" style="top: 10%; left: 50%;">
                         <i class="fab fa-java"></i>
                         <div class="skill-tooltip">Java</div>
                     </div>
                     
-                    <!-- Python (Right) - Perfectly centered on outer ring -->
-                    <div class="skill-node python" style="top: 50%; left: 86%;">
+                    <!-- Python (Right, on outer ring) -->
+                    <div class="skill-node python" style="top: 50%; left: 90%;">
                         <i class="fab fa-python"></i>
                         <div class="skill-tooltip">Python</div>
                     </div>
                     
-                    <!-- Database (Bottom) - Perfectly centered on outer ring -->
-                    <div class="skill-node database" style="top: 86%; left: 50%;">
+                    <!-- Database (Bottom, on outer ring) -->
+                    <div class="skill-node database" style="top: 90%; left: 50%;">
                         <i class="fas fa-database"></i>
                         <div class="skill-tooltip">PostgreSQL/SQL</div>
                     </div>
                     
-                    <!-- Docker (Left) - Perfectly centered on outer ring -->
-                    <div class="skill-node docker" style="top: 50%; left: 14%;">
+                    <!-- Docker (Left, on outer ring) -->
+                    <div class="skill-node docker" style="top: 50%; left: 10%;">
                         <i class="fab fa-docker"></i>
                         <div class="skill-tooltip">Docker</div>
                     </div>
                     
-                    <!-- TensorFlow (Top-Right Diagonal) - Perfect 45° angle -->
-                    <div class="skill-node tensorflow" style="top: 14%; left: 86%;">
+                    <!-- TensorFlow (Top-Right Diagonal, on inner ring) -->
+                    <div class="skill-node tensorflow" style="top: 20%; left: 80%;">
                         <i class="fas fa-brain"></i>
                         <div class="skill-tooltip">TensorFlow</div>
                     </div>
                     
-                    <!-- Git (Top-Left Diagonal) - Perfect 45° angle -->
-                    <div class="skill-node git" style="top: 14%; left: 14%;">
+                    <!-- Git (Top-Left Diagonal, on inner ring) -->
+                    <div class="skill-node git" style="top: 20%; left: 20%;">
                         <i class="fab fa-git-alt"></i>
                         <div class="skill-tooltip">Git</div>
                     </div>
                     
-                    <!-- AWS (Bottom-Left Diagonal) - Perfect 45° angle -->
-                    <div class="skill-node aws" style="top: 86%; left: 14%;">
+                    <!-- AWS (Bottom-Left Diagonal, on inner ring) -->
+                    <div class="skill-node aws" style="top: 80%; left: 20%;">
                         <i class="fab fa-aws"></i>
                         <div class="skill-tooltip">AWS</div>
                     </div>
                     
-                    <!-- Postman (Bottom-Right Diagonal) - Perfect 45° angle -->
-                    <div class="skill-node postman" style="top: 86%; left: 86%;">
+                    <!-- Postman (Bottom-Right Diagonal, on inner ring) -->
+                    <div class="skill-node postman" style="top: 80%; left: 80%;">
                         <i class="fas fa-paper-plane"></i>
                         <div class="skill-tooltip">Postman</div>
                     </div>
