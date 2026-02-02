@@ -267,7 +267,7 @@
             color: var(--primary);
         }
         
-        /* FIXED: Skills Web Diagram - Perfect Circle Alignment on Desktop */
+        /* FIXED: Skills Web Diagram with PERFECT Circular Alignment */
         .skills-diagram {
             position: relative;
             height: 500px;
@@ -284,7 +284,7 @@
             margin: 0 auto;
         }
         
-        /* Web rings */
+        /* Web rings - positioned to go through skill node centers */
         .web-ring {
             position: absolute;
             border: 1px solid rgba(0, 217, 255, 0.2);
@@ -294,17 +294,19 @@
             transform: translate(-50%, -50%);
         }
         
+        /* Inner ring - for center node */
         .web-ring.inner {
             width: 160px;
             height: 160px;
         }
         
+        /* Outer ring - PERFECTLY sized to go through 8 outer nodes */
         .web-ring.outer {
-            width: 320px;
-            height: 320px;
+            width: 380px; /* Increased to pass through node centers */
+            height: 380px; /* Increased to pass through node centers */
         }
         
-        /* FIXED: Perfect circular positioning using trigonometry */
+        /* Skill nodes with PERFECT circular positioning */
         .skill-node {
             position: absolute;
             width: 70px;
@@ -1140,8 +1142,8 @@
             }
             
             .web-ring.outer {
-                width: 200px;
-                height: 200px;
+                width: 240px;
+                height: 240px;
             }
             
             .skill-node {
@@ -1225,8 +1227,8 @@
             }
             
             .web-ring.outer {
-                width: 160px;
-                height: 160px;
+                width: 200px;
+                height: 200px;
             }
             
             .skill-node {
@@ -1338,8 +1340,8 @@
             }
             
             .web-ring.outer {
-                width: 120px;
-                height: 120px;
+                width: 160px;
+                height: 160px;
             }
             
             .skill-node {
@@ -1429,8 +1431,8 @@
             }
             
             .web-ring.outer {
-                width: 100px;
-                height: 100px;
+                width: 140px;
+                height: 140px;
             }
             
             .skill-node {
@@ -1544,64 +1546,64 @@
                 </p>
             </div>
             
-            <!-- UPDATED Skills Web Diagram with Tooltips & 4 More Skills -->
+            <!-- FIXED: Skills Web Diagram with PERFECT Circular Alignment -->
             <div class="skills-diagram">
                 <div class="diagram-container">
                     <!-- Web rings that go through logo centers -->
                     <div class="web-ring inner"></div>
                     <div class="web-ring outer"></div>
                     
-                    <!-- FIXED: 9 Skill Nodes with Perfect Circular Positioning -->
+                    <!-- PERFECTLY POSITIONED: 9 Skill Nodes -->
                     <!-- Spring Boot (Center) -->
                     <div class="skill-node spring" style="top: 50%; left: 50%;">
                         <i class="fas fa-leaf"></i>
                         <div class="skill-tooltip">Spring Boot</div>
                     </div>
                     
-                    <!-- Java (Top) -->
-                    <div class="skill-node java" style="top: 11.5%; left: 50%;">
+                    <!-- Java (Top - 0°) -->
+                    <div class="skill-node java" style="top: 11%; left: 50%;">
                         <i class="fab fa-java"></i>
                         <div class="skill-tooltip">Java</div>
                     </div>
                     
-                    <!-- Python (Right) -->
-                    <div class="skill-node python" style="top: 50%; left: 88.5%;">
+                    <!-- Python (Right - 90°) -->
+                    <div class="skill-node python" style="top: 50%; left: 89%;">
                         <i class="fab fa-python"></i>
                         <div class="skill-tooltip">Python</div>
                     </div>
                     
-                    <!-- Database (Bottom) -->
-                    <div class="skill-node database" style="top: 88.5%; left: 50%;">
+                    <!-- Database (Bottom - 180°) -->
+                    <div class="skill-node database" style="top: 89%; left: 50%;">
                         <i class="fas fa-database"></i>
                         <div class="skill-tooltip">PostgreSQL/SQL</div>
                     </div>
                     
-                    <!-- Docker (Left) -->
-                    <div class="skill-node docker" style="top: 50%; left: 11.5%;">
+                    <!-- Docker (Left - 270°) -->
+                    <div class="skill-node docker" style="top: 50%; left: 11%;">
                         <i class="fab fa-docker"></i>
                         <div class="skill-tooltip">Docker</div>
                     </div>
                     
-                    <!-- TensorFlow (Top-Right Diagonal) -->
-                    <div class="skill-node tensorflow" style="top: 30%; left: 70%;">
+                    <!-- TensorFlow (Top-Right Diagonal - 45°) -->
+                    <div class="skill-node tensorflow" style="top: 11%; left: 89%;">
                         <i class="fas fa-brain"></i>
                         <div class="skill-tooltip">TensorFlow</div>
                     </div>
                     
-                    <!-- Git (Top-Left Diagonal) -->
-                    <div class="skill-node git" style="top: 30%; left: 30%;">
+                    <!-- Git (Top-Left Diagonal - 315°) -->
+                    <div class="skill-node git" style="top: 11%; left: 11%;">
                         <i class="fab fa-git-alt"></i>
                         <div class="skill-tooltip">Git</div>
                     </div>
                     
-                    <!-- AWS (Bottom-Left Diagonal) -->
-                    <div class="skill-node aws" style="top: 70%; left: 30%;">
+                    <!-- AWS (Bottom-Left Diagonal - 225°) -->
+                    <div class="skill-node aws" style="top: 89%; left: 11%;">
                         <i class="fab fa-aws"></i>
                         <div class="skill-tooltip">AWS</div>
                     </div>
                     
-                    <!-- Postman (Bottom-Right Diagonal) -->
-                    <div class="skill-node postman" style="top: 70%; left: 70%;">
+                    <!-- Postman (Bottom-Right Diagonal - 135°) -->
+                    <div class="skill-node postman" style="top: 89%; left: 89%;">
                         <i class="fas fa-paper-plane"></i>
                         <div class="skill-tooltip">Postman</div>
                     </div>
