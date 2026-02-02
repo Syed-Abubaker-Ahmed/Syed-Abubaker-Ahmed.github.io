@@ -29,21 +29,21 @@ The site is fully responsive and optimized for desktop, tablet, and mobile devic
 
 ## Tech Stack
 
-- HTML5  
-- CSS3 (custom variables, animations, responsive layouts)  
-- Vanilla JavaScript  
-- Font Awesome  
+- HTML5
+- CSS3 (custom variables, animations, responsive layouts)
+- Vanilla JavaScript
+- Font Awesome
 - Google Fonts (Inter, JetBrains Mono)
 
 ---
 
 ## Project Structure
 
-.
+```
 ├── index.html
 ├── Syed Abubaker Ahmed.pdf
 └── README.md
-
+```
 
 ---
 
@@ -53,47 +53,48 @@ The site is fully responsive and optimized for desktop, tablet, and mobile devic
 ```bash
 open index.html
 ```
-
 or simply double-click the file.
-Using Live Server
-```
+
+### Using Live Server
+```bash
 npm install -g live-server
 live-server
 ```
-Responsive Design
 
-    Desktop: Floating dock navigation with animated interactions
+---
 
-    Tablet: Adaptive grid layout and optimized navigation
+## Responsive Design
 
-    Mobile: Bottom navigation bar with touch-friendly interactions
+- **Desktop**: Floating dock navigation with animated interactions
+- **Tablet**: Adaptive grid layout and optimized navigation
+- **Mobile**: Bottom navigation bar with touch-friendly interactions
 
-Sections
+---
 
-    Introduction
+## Sections
 
-    Skills
+- Introduction
+- Skills
+- Experience
+- Projects
+- Education
+- Contact
 
-    Experience
+---
 
-    Projects
+## Resume
 
-    Education
+The resume can be downloaded directly from the website:  
+[Syed Abubaker Ahmed.pdf](Syed Abubaker Ahmed.pdf)
 
-    Contact
+---
 
-Resume
+## Contact
 
-The resume can be downloaded directly from the website:
+- **GitHub**: [https://github.com/Syed-Abubaker-Ahmed](https://github.com/Syed-Abubaker-Ahmed)
+- **LinkedIn**: [https://www.linkedin.com/in/syed-abubaker-ahmed/](https://www.linkedin.com/in/syed-abubaker-ahmed/)
+- **Email**: sabubakerahmed@gmail.com
 
-Syed Abubaker Ahmed.pdf
-
-Contact
-
-    GitHub: https://github.com/Syed-Abubaker-Ahmed
-
-    LinkedIn: https://www.linkedin.com/in/syed-abubaker-ahmed/
-
-    Email: sabubakerahmed@gmail.com
+---
 
 Built by Syed Abubaker Ahmed
