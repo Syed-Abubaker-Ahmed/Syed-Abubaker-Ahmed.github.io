@@ -52,13 +52,14 @@ The site is fully responsive and optimized for desktop, tablet, and mobile devic
 ### Open Locally
 ```bash
 open index.html
+```
 
 or simply double-click the file.
 Using Live Server
-
+```
 npm install -g live-server
 live-server
-
+```
 Responsive Design
 
     Desktop: Floating dock navigation with animated interactions
