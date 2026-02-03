@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Syed Abubaker Ahmed | BackEnd Developer Story</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --dark-bg: #0a0a0f;
@@ -20,35 +23,107 @@
             --card-border: rgba(0, 217, 255, 0.2);
             --neon-glow: 0 0 20px rgba(0, 217, 255, 0.5);
             --section-height: 100vh;
+            --particle-color: rgba(0, 217, 255, 0.6);
+            --particle-line: rgba(0, 217, 255, 0.15);
         }
-        
+
+        /* Bright Light Mode */
+        [data-theme="light"] {
+            --dark-bg: #ffffff;
+            --darker-bg: #f0f9ff;
+            --primary: #0891b2;
+            --primary-dark: #0e7490;
+            --secondary: #e11d48;
+            --accent: #0d9488;
+            --text: #0f172a;
+            --text-muted: #475569;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --card-border: rgba(8, 145, 178, 0.25);
+            --neon-glow: 0 4px 20px rgba(8, 145, 178, 0.25);
+            --particle-color: rgba(8, 145, 178, 0.5);
+            --particle-line: rgba(8, 145, 178, 0.12);
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            cursor: pointer;
+            z-index: 1002;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: var(--primary);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: var(--neon-glow);
+        }
+
+        .theme-toggle .fa-sun {
+            display: none;
+        }
+
+        .theme-toggle .fa-moon {
+            display: block;
+        }
+
+        [data-theme="light"] .theme-toggle .fa-sun {
+            display: block;
+        }
+
+        [data-theme="light"] .theme-toggle .fa-moon {
+            display: none;
+        }
+
+        /* Particle Canvas Background */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         html {
             scroll-behavior: smooth;
             scroll-snap-type: y mandatory;
             overflow-x: hidden;
         }
-        
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--dark-bg);
             color: var(--text);
             line-height: 1.6;
             overflow-x: hidden;
-            background-image: 
+            background-image:
                 radial-gradient(circle at 10% 20%, rgba(0, 217, 255, 0.05) 0%, transparent 20%),
                 radial-gradient(circle at 90% 80%, rgba(255, 42, 109, 0.05) 0%, transparent 20%);
         }
-        
+
         .code-font {
             font-family: 'JetBrains Mono', monospace;
         }
-        
+
         /* Floating Dock Navigation - Desktop Only */
         .floating-dock {
             position: fixed;
@@ -68,12 +143,12 @@
             opacity: 0;
             transform: translateX(-50%) translateY(-100px);
         }
-        
+
         .floating-dock.visible {
             opacity: 1;
             transform: translateX(-50%) translateY(0);
         }
-        
+
         .dock-tab {
             padding: 10px 22px;
             border-radius: 30px;
@@ -86,24 +161,24 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .dock-tab:hover {
             color: var(--primary);
             background: rgba(0, 217, 255, 0.1);
         }
-        
+
         .dock-tab.active {
             color: var(--dark-bg);
             background: var(--primary);
             font-weight: 600;
             box-shadow: 0 0 15px rgba(0, 217, 255, 0.7);
         }
-        
+
         .dock-tab.active:hover {
             background: var(--primary);
             color: var(--dark-bg);
         }
-        
+
         /* Mobile Navigation Bar - Hidden on Desktop */
         .mobile-nav {
             display: none;
@@ -117,14 +192,14 @@
             z-index: 1001;
             padding: 8px 0;
         }
-        
+
         .mobile-nav-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 5px;
             padding: 0 10px;
         }
-        
+
         .mobile-nav-item {
             display: flex;
             flex-direction: column;
@@ -136,22 +211,22 @@
             color: var(--text-muted);
             text-decoration: none;
         }
-        
+
         .mobile-nav-item.active {
             color: var(--primary);
             background: rgba(0, 217, 255, 0.1);
         }
-        
+
         .mobile-nav-icon {
             font-size: 1.2rem;
             margin-bottom: 4px;
         }
-        
+
         .mobile-nav-text {
             font-size: 0.7rem;
             font-weight: 500;
         }
-        
+
         /* Storytelling Navigation Dots (Keep for reference but hidden by default) */
         .story-nav {
             position: fixed;
@@ -163,7 +238,7 @@
             flex-direction: column;
             gap: 20px;
         }
-        
+
         .nav-dot {
             width: 12px;
             height: 12px;
@@ -173,18 +248,18 @@
             transition: all 0.3s ease;
             position: relative;
         }
-        
+
         .nav-dot.active {
             background-color: var(--primary);
             box-shadow: var(--neon-glow);
             transform: scale(1.3);
         }
-        
+
         .nav-dot:hover {
             transform: scale(1.5);
             background-color: var(--primary);
         }
-        
+
         /* Story Sections */
         .story-section {
             min-height: var(--section-height);
@@ -195,12 +270,12 @@
             padding: 0 10%;
             overflow: hidden;
         }
-        
+
         /* Intro Section with Two Columns */
         #intro {
-            background: linear-gradient(135deg, var(--darker-bg) 0%, #0a1525 100%);
+            /* background removed for seamless dark mode */
         }
-        
+
         .intro-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -210,14 +285,14 @@
             margin: 0 auto;
             align-items: center;
         }
-        
+
         .intro-content {
             max-width: 800px;
             opacity: 0;
             transform: translateY(50px);
             animation: fadeInUp 1s forwards 0.5s;
         }
-        
+
         .intro-name {
             font-size: 4rem;
             font-weight: 800;
@@ -228,13 +303,13 @@
             background-clip: text;
             line-height: 1.1;
         }
-        
+
         .intro-tagline {
             font-size: 1.8rem;
             color: var(--text-muted);
             margin-bottom: 25px;
         }
-        
+
         .intro-description {
             font-size: 1.2rem;
             max-width: 700px;
@@ -242,7 +317,7 @@
             color: var(--text-muted);
             line-height: 1.7;
         }
-        
+
         .scroll-hint {
             position: absolute;
             bottom: 40px;
@@ -256,17 +331,17 @@
             animation: bounce 2s infinite;
             transition: opacity 0.5s ease;
         }
-        
+
         .scroll-hint.hidden {
             opacity: 0;
             pointer-events: none;
         }
-        
+
         .scroll-hint span {
             font-size: 0.9rem;
             color: var(--primary);
         }
-        
+
         /* Skills Web Diagram - FIXED ALIGNMENT & TOOLTIPS */
         .skills-diagram {
             position: relative;
@@ -276,14 +351,14 @@
             justify-content: center;
             align-items: center;
         }
-        
+
         .diagram-container {
             position: relative;
             width: 450px;
             height: 450px;
             margin: 0 auto;
         }
-        
+
         /* FIXED: Web rings that go through logo centers */
         .web-ring {
             position: absolute;
@@ -293,19 +368,19 @@
             left: 50%;
             transform: translate(-50%, -50%);
         }
-        
+
         /* Inner ring - logos will be centered on this ring */
         .web-ring.inner {
             width: 160px;
             height: 160px;
         }
-        
+
         /* Outer ring - logos will be centered on this ring */
         .web-ring.outer {
             width: 320px;
             height: 320px;
         }
-        
+
         /* FIXED: Skill nodes perfectly centered on rings */
         .skill-node {
             position: absolute;
@@ -321,30 +396,75 @@
             transition: all 0.3s ease;
             z-index: 2;
             cursor: pointer;
-            overflow: hidden;
+            /* overflow: hidden; Removed to allow tooltips to show */
             font-size: 2rem;
             /* Consistent brightness */
             filter: brightness(1.2);
         }
-        
+
         .skill-node:hover {
             transform: translate(-50%, -50%) scale(1.3);
             box-shadow: var(--neon-glow);
             z-index: 10;
             filter: brightness(1.5);
         }
-        
+
+        [data-theme="light"] .skill-node {
+            background: rgba(255, 255, 255, 0.95);
+            border-width: 1px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        [data-theme="light"] .skill-node:hover {
+            box-shadow: 0 10px 25px rgba(8, 145, 178, 0.25);
+        }
+
         /* Skill colors with consistent brightness */
-        .skill-node.spring { border-color: #6db33f; color: #6db33f; }
-        .skill-node.java { border-color: #007396; color: #007396; }
-        .skill-node.python { border-color: #306998; color: #306998; }
-        .skill-node.database { border-color: #336791; color: #336791; }
-        .skill-node.docker { border-color: #2496ed; color: #2496ed; }
-        .skill-node.tensorflow { border-color: #ff6f00; color: #ff6f00; }
-        .skill-node.git { border-color: #f05032; color: #f05032; }
-        .skill-node.aws { border-color: #ff9900; color: #ff9900; }
-        .skill-node.postman { border-color: #ff6c37; color: #ff6c37; }
-        
+        .skill-node.spring {
+            border-color: #6db33f;
+            color: #6db33f;
+        }
+
+        .skill-node.java {
+            border-color: #007396;
+            color: #007396;
+        }
+
+        .skill-node.python {
+            border-color: #306998;
+            color: #306998;
+        }
+
+        .skill-node.database {
+            border-color: #336791;
+            color: #336791;
+        }
+
+        .skill-node.docker {
+            border-color: #2496ed;
+            color: #2496ed;
+        }
+
+        .skill-node.tensorflow {
+            border-color: #ff6f00;
+            color: #ff6f00;
+        }
+
+        .skill-node.git {
+            border-color: #f05032;
+            color: #f05032;
+        }
+
+        .skill-node.aws {
+            border-color: #ff9900;
+            color: #ff9900;
+        }
+
+        .skill-node.postman {
+            border-color: #ff6c37;
+            color: #ff6c37;
+        }
+
         /* Tooltip styling */
         .skill-tooltip {
             position: absolute;
@@ -364,8 +484,21 @@
             border: 1px solid rgba(0, 217, 255, 0.3);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             z-index: 100;
+            pointer-events: none;
+            /* Prevent tooltip from flickering on hover */
         }
-        
+
+        [data-theme="light"] .skill-tooltip {
+            background-color: rgba(255, 255, 255, 0.95);
+            color: var(--text);
+            border-color: rgba(8, 145, 178, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="light"] .skill-tooltip::after {
+            border-color: rgba(255, 255, 255, 0.95) transparent transparent transparent;
+        }
+
         .skill-tooltip::after {
             content: '';
             position: absolute;
@@ -376,18 +509,18 @@
             border-style: solid;
             border-color: rgba(10, 15, 25, 0.95) transparent transparent transparent;
         }
-        
+
         .skill-node:hover .skill-tooltip {
             opacity: 1;
             visibility: visible;
             top: -45px;
         }
-        
+
         /* Skills Section */
         #skills {
-            background: linear-gradient(135deg, #0a1525 0%, #0a0f1a 100%);
+            /* background removed for seamless dark mode */
         }
-        
+
         .skills-container {
             width: 100%;
             max-width: 1200px;
@@ -397,12 +530,12 @@
             gap: 60px;
             align-items: center;
         }
-        
+
         .skills-visual {
             position: relative;
             height: 400px;
         }
-        
+
         .code-terminal {
             background-color: rgba(10, 15, 25, 0.95);
             border-radius: 10px;
@@ -414,7 +547,7 @@
             overflow: hidden;
             box-shadow: var(--neon-glow);
         }
-        
+
         .terminal-header {
             display: flex;
             align-items: center;
@@ -423,22 +556,30 @@
             padding-bottom: 10px;
             border-bottom: 1px solid rgba(0, 217, 255, 0.2);
         }
-        
+
         .terminal-dot {
             width: 12px;
             height: 12px;
             border-radius: 50%;
         }
-        
-        .terminal-dot.red { background-color: #ff5f56; }
-        .terminal-dot.yellow { background-color: #ffbd2e; }
-        .terminal-dot.green { background-color: #27c93f; }
-        
+
+        .terminal-dot.red {
+            background-color: #ff5f56;
+        }
+
+        .terminal-dot.yellow {
+            background-color: #ffbd2e;
+        }
+
+        .terminal-dot.green {
+            background-color: #27c93f;
+        }
+
         .terminal-content {
             font-size: 0.95rem;
             line-height: 1.8;
         }
-        
+
         .terminal-line {
             margin-bottom: 8px;
             opacity: 0;
@@ -447,38 +588,43 @@
             border-right: 2px solid var(--primary);
             animation: typing 0.5s steps(40, end) forwards, blink 1s infinite;
         }
-        
-        .terminal-line:nth-child(1) { 
-            animation-delay: 0.3s, 0.8s; 
+
+        .terminal-line:nth-child(1) {
+            animation-delay: 0.3s, 0.8s;
             width: 0;
             animation-fill-mode: forwards;
         }
-        .terminal-line:nth-child(2) { 
-            animation-delay: 0.6s, 1.1s; 
+
+        .terminal-line:nth-child(2) {
+            animation-delay: 0.6s, 1.1s;
             width: 0;
             animation-fill-mode: forwards;
         }
-        .terminal-line:nth-child(3) { 
-            animation-delay: 0.9s, 1.4s; 
+
+        .terminal-line:nth-child(3) {
+            animation-delay: 0.9s, 1.4s;
             width: 0;
             animation-fill-mode: forwards;
         }
-        .terminal-line:nth-child(4) { 
-            animation-delay: 1.2s, 1.7s; 
+
+        .terminal-line:nth-child(4) {
+            animation-delay: 1.2s, 1.7s;
             width: 0;
             animation-fill-mode: forwards;
         }
-        .terminal-line:nth-child(5) { 
-            animation-delay: 1.5s, 2.0s; 
+
+        .terminal-line:nth-child(5) {
+            animation-delay: 1.5s, 2.0s;
             width: 0;
             animation-fill-mode: forwards;
         }
-        .terminal-line:nth-child(6) { 
-            animation-delay: 1.8s, 2.3s; 
+
+        .terminal-line:nth-child(6) {
+            animation-delay: 1.8s, 2.3s;
             width: 0;
             animation-fill-mode: forwards;
         }
-        
+
         .terminal-cursor {
             display: inline-block;
             width: 8px;
@@ -487,31 +633,31 @@
             animation: blink 1s infinite;
             margin-left: 5px;
         }
-        
+
         .terminal-path {
             color: var(--primary);
         }
-        
+
         .terminal-command {
             color: var(--secondary);
         }
-        
+
         .skill-category {
             margin-bottom: 40px;
         }
-        
+
         .skill-category h3 {
             color: var(--primary);
             margin-bottom: 15px;
             font-size: 1.5rem;
         }
-        
+
         .skill-tags {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
         }
-        
+
         .skill-tag {
             background-color: rgba(0, 217, 255, 0.1);
             color: var(--primary);
@@ -521,24 +667,24 @@
             border: 1px solid var(--card-border);
             transition: all 0.3s ease;
         }
-        
+
         .skill-tag:hover {
             background-color: rgba(0, 217, 255, 0.2);
             transform: translateY(-3px);
             box-shadow: var(--neon-glow);
         }
-        
+
         /* Experience Section */
         #experience {
-            background: linear-gradient(135deg, #0a0f1a 0%, #0a1525 100%);
+            /* background removed for seamless dark mode */
         }
-        
+
         .exp-container {
             width: 100%;
             max-width: 1000px;
             margin: 0 auto;
         }
-        
+
         .exp-title {
             font-size: 3rem;
             text-align: center;
@@ -546,7 +692,7 @@
             color: var(--text);
             position: relative;
         }
-        
+
         .exp-title::after {
             content: '';
             position: absolute;
@@ -557,13 +703,13 @@
             left: 50%;
             transform: translateX(-50%);
         }
-        
+
         .exp-timeline {
             position: relative;
             max-width: 800px;
             margin: 0 auto;
         }
-        
+
         .exp-timeline::before {
             content: '';
             position: absolute;
@@ -574,7 +720,7 @@
             background: linear-gradient(to bottom, transparent, var(--primary), transparent);
             transform: translateX(-50%);
         }
-        
+
         .timeline-item {
             position: relative;
             margin-bottom: 80px;
@@ -583,20 +729,20 @@
             transform: translateY(30px);
             transition: all 0.8s ease;
         }
-        
+
         .timeline-item.visible {
             opacity: 1;
             transform: translateY(0);
         }
-        
+
         .timeline-item:nth-child(odd) {
             left: 0;
         }
-        
+
         .timeline-item:nth-child(even) {
             left: calc(50% + 40px);
         }
-        
+
         .timeline-content {
             background-color: var(--card-bg);
             border-radius: 10px;
@@ -605,12 +751,12 @@
             position: relative;
             transition: all 0.3s ease;
         }
-        
+
         .timeline-content:hover {
             transform: translateY(-5px);
             box-shadow: var(--neon-glow);
         }
-        
+
         .timeline-item:nth-child(odd) .timeline-content::before {
             content: '';
             position: absolute;
@@ -620,7 +766,7 @@
             height: 2px;
             background-color: var(--primary);
         }
-        
+
         .timeline-item:nth-child(even) .timeline-content::before {
             content: '';
             position: absolute;
@@ -630,7 +776,7 @@
             height: 2px;
             background-color: var(--primary);
         }
-        
+
         .timeline-marker {
             position: absolute;
             width: 20px;
@@ -641,15 +787,15 @@
             top: 25px;
             box-shadow: var(--neon-glow);
         }
-        
+
         .timeline-item:nth-child(odd) .timeline-marker {
             right: -50px;
         }
-        
+
         .timeline-item:nth-child(even) .timeline-marker {
             left: -50px;
         }
-        
+
         .job-header {
             display: flex;
             justify-content: space-between;
@@ -658,12 +804,12 @@
             flex-wrap: wrap;
             gap: 10px;
         }
-        
+
         .job-header h3 {
             color: var(--primary);
             font-size: 1.4rem;
         }
-        
+
         .job-date {
             color: var(--primary);
             font-family: 'JetBrains Mono', monospace;
@@ -673,7 +819,7 @@
             padding: 4px 10px;
             border-radius: 4px;
         }
-        
+
         .company {
             color: var(--text);
             font-weight: 600;
@@ -681,20 +827,20 @@
             display: block;
             font-size: 1.1rem;
         }
-        
+
         .job-description {
             color: var(--text-muted);
             font-size: 0.95rem;
             line-height: 1.6;
             margin-bottom: 15px;
         }
-        
+
         .tech-stack {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
         }
-        
+
         .tech-tag {
             background-color: rgba(255, 42, 109, 0.1);
             color: var(--secondary);
@@ -704,18 +850,68 @@
             border: 1px solid rgba(255, 42, 109, 0.3);
             font-family: 'JetBrains Mono', monospace;
         }
-        
+
         /* Projects Section */
         #projects {
-            background: linear-gradient(135deg, #0a1525 0%, #0a0f1a 100%);
+            /* background removed for seamless dark mode */
+            padding-bottom: 80px;
         }
-        
+
+        /* Light mode body background */
+        [data-theme="light"] body {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            background-attachment: fixed;
+            /* Ensures gradient covers full scroll */
+        }
+
+        /* Remove section backgrounds in light mode to show particles */
+        [data-theme="light"] #projects {
+            /* background removed */
+        }
+
+        [data-theme="light"] #intro {
+            /* background removed */
+        }
+
+        [data-theme="light"] #skills {
+            /* background removed */
+        }
+
+        [data-theme="light"] #experience {
+            /* background removed */
+        }
+
+        [data-theme="light"] #education {
+            /* background removed */
+        }
+
+        [data-theme="light"] #contact {
+            /* background removed */
+        }
+
+        [data-theme="light"] .floating-dock {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: rgba(8, 145, 178, 0.3);
+        }
+
+        [data-theme="light"] .mobile-nav {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: rgba(8, 145, 178, 0.3);
+        }
+
+        [data-theme="light"] .code-terminal {
+            background-color: rgba(255, 255, 255, 0.95);
+            color: var(--text);
+            border-color: rgba(8, 145, 178, 0.3);
+            box-shadow: 0 10px 30px rgba(8, 145, 178, 0.15);
+        }
+
         .projects-container {
             width: 100%;
             max-width: 1200px;
             margin: 0 auto;
         }
-        
+
         .projects-title {
             font-size: 3rem;
             text-align: center;
@@ -723,7 +919,7 @@
             color: var(--text);
             position: relative;
         }
-        
+
         .projects-title::after {
             content: '';
             position: absolute;
@@ -734,14 +930,14 @@
             left: 50%;
             transform: translateX(-50%);
         }
-        
+
         .projects-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 30px;
             margin-top: 30px;
         }
-        
+
         .project-card {
             background-color: var(--card-bg);
             border-radius: 10px;
@@ -754,45 +950,45 @@
             opacity: 0;
             transform: translateY(40px);
         }
-        
+
         .project-card.visible {
             opacity: 1;
             transform: translateY(0);
         }
-        
+
         .project-card:hover {
             transform: translateY(-10px);
             border-color: var(--secondary);
             box-shadow: 0 10px 30px rgba(255, 42, 109, 0.3);
         }
-        
+
         .project-header {
             padding: 25px 25px 15px;
             border-bottom: 1px solid rgba(0, 217, 255, 0.1);
         }
-        
+
         .project-header h3 {
             color: var(--secondary);
             margin-bottom: 10px;
             font-size: 1.5rem;
         }
-        
+
         .project-desc {
             color: var(--text-muted);
             margin-bottom: 15px;
             font-size: 0.95rem;
             line-height: 1.5;
         }
-        
+
         .project-body {
             padding: 20px 25px;
             flex-grow: 1;
         }
-        
+
         .project-features {
             list-style: none;
         }
-        
+
         .project-features li {
             margin-bottom: 12px;
             padding-left: 24px;
@@ -801,7 +997,7 @@
             line-height: 1.5;
             font-size: 0.9rem;
         }
-        
+
         .project-features li:before {
             content: '▶';
             color: var(--secondary);
@@ -809,7 +1005,7 @@
             left: 0;
             font-size: 0.8rem;
         }
-        
+
         .project-footer {
             padding: 20px 25px;
             border-top: 1px solid rgba(0, 217, 255, 0.1);
@@ -817,7 +1013,7 @@
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .project-link {
             color: var(--primary);
             text-decoration: none;
@@ -828,31 +1024,31 @@
             transition: all 0.3s ease;
             font-size: 0.95rem;
         }
-        
+
         .project-link:hover {
             color: var(--secondary);
             gap: 12px;
         }
-        
+
         /* Education Section */
         #education {
-            background: linear-gradient(135deg, #0a0f1a 0%, #0a1525 100%);
+            /* background removed for seamless dark mode */
         }
-        
+
         .edu-container {
             width: 100%;
             max-width: 800px;
             margin: 0 auto;
             text-align: center;
         }
-        
+
         .edu-title {
             font-size: 3rem;
             margin-bottom: 60px;
             color: var(--text);
             position: relative;
         }
-        
+
         .edu-title::after {
             content: '';
             position: absolute;
@@ -863,7 +1059,7 @@
             left: 50%;
             transform: translateX(-50%);
         }
-        
+
         .edu-card {
             background-color: var(--card-bg);
             border-radius: 10px;
@@ -875,12 +1071,12 @@
             transform: translateY(40px);
             transition: all 0.6s ease;
         }
-        
+
         .edu-card.visible {
             opacity: 1;
             transform: translateY(0);
         }
-        
+
         .edu-icon {
             width: 80px;
             height: 80px;
@@ -894,20 +1090,20 @@
             color: var(--accent);
             border: 2px solid rgba(5, 217, 232, 0.3);
         }
-        
+
         .edu-details h3 {
             color: var(--accent);
             margin-bottom: 10px;
             font-size: 1.8rem;
         }
-        
+
         .edu-degree {
             color: var(--text);
             font-size: 1.3rem;
             margin-bottom: 8px;
             font-weight: 600;
         }
-        
+
         .edu-date {
             color: var(--primary);
             font-family: 'JetBrains Mono', monospace;
@@ -915,7 +1111,7 @@
             font-size: 1.1rem;
             margin-bottom: 20px;
         }
-        
+
         .edu-description {
             color: var(--text-muted);
             line-height: 1.7;
@@ -923,27 +1119,27 @@
             max-width: 500px;
             margin: 0 auto;
         }
-        
+
         /* Contact Section */
         #contact {
-            background: linear-gradient(135deg, #0a1525 0%, #05050a 100%);
+            /* background removed for seamless dark mode */
             min-height: 90vh;
         }
-        
+
         .contact-container {
             width: 100%;
             max-width: 1000px;
             margin: 0 auto;
             text-align: center;
         }
-        
+
         .contact-title {
             font-size: 3rem;
             margin-bottom: 60px;
             color: var(--text);
             position: relative;
         }
-        
+
         .contact-title::after {
             content: '';
             position: absolute;
@@ -954,7 +1150,7 @@
             left: 50%;
             transform: translateX(-50%);
         }
-        
+
         .contact-description {
             max-width: 700px;
             margin: 0 auto 50px;
@@ -962,7 +1158,7 @@
             font-size: 1.2rem;
             line-height: 1.8;
         }
-        
+
         .contact-links {
             display: flex;
             justify-content: center;
@@ -970,7 +1166,7 @@
             gap: 40px;
             margin-top: 50px;
         }
-        
+
         .contact-link {
             display: flex;
             flex-direction: column;
@@ -981,12 +1177,12 @@
             transition: all 0.3s ease;
             width: 150px;
         }
-        
+
         .contact-link:hover {
             color: var(--primary);
             transform: translateY(-10px);
         }
-        
+
         .contact-icon {
             width: 70px;
             height: 70px;
@@ -1000,17 +1196,17 @@
             border: 2px solid rgba(0, 217, 255, 0.3);
             transition: all 0.3s ease;
         }
-        
+
         .contact-link:hover .contact-icon {
             background: rgba(0, 217, 255, 0.2);
             box-shadow: var(--neon-glow);
             transform: scale(1.1);
         }
-        
+
         .resume-download {
             margin-top: 60px;
         }
-        
+
         .btn {
             padding: 16px 34px;
             border-radius: 4px;
@@ -1026,18 +1222,18 @@
             cursor: pointer;
             border: none;
         }
-        
+
         .btn-primary {
             background: var(--primary);
             color: var(--dark-bg);
             box-shadow: var(--neon-glow);
         }
-        
+
         .btn-primary:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 30px rgba(0, 217, 255, 0.4);
         }
-        
+
         /* Animations */
         @keyframes fadeInUp {
             to {
@@ -1045,28 +1241,62 @@
                 transform: translateY(0);
             }
         }
-        
+
         @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
-            40% { transform: translateX(-50%) translateY(-10px); }
-            60% { transform: translateX(-50%) translateY(-5px); }
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
         }
-        
+
         @keyframes typing {
-            from { width: 0; opacity: 1; }
-            to { width: 100%; opacity: 1; }
+            from {
+                width: 0;
+                opacity: 1;
+            }
+
+            to {
+                width: 100%;
+                opacity: 1;
+            }
         }
-        
+
         @keyframes blink {
-            0%, 100% { border-color: transparent; }
-            50% { border-color: var(--primary); }
+
+            0%,
+            100% {
+                border-color: transparent;
+            }
+
+            50% {
+                border-color: var(--primary);
+            }
         }
-        
+
         @keyframes blink-cursor {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
         }
-        
+
         /* Scroll Progress Indicator */
         .scroll-progress {
             position: fixed;
@@ -1078,7 +1308,7 @@
             transform-origin: 0%;
             z-index: 1001;
         }
-        
+
         /* Responsive Design - Mobile Specific */
         @media (max-width: 1100px) {
             .intro-container {
@@ -1086,88 +1316,88 @@
                 gap: 40px;
                 text-align: center;
             }
-            
+
             .skills-container {
                 grid-template-columns: 1fr;
                 gap: 30px;
             }
-            
+
             .skills-visual {
                 height: 300px;
             }
-            
+
             .exp-timeline::before {
                 left: 30px;
             }
-            
+
             .timeline-item {
                 width: calc(100% - 80px);
                 left: 80px !important;
             }
-            
+
             .timeline-item:nth-child(odd) .timeline-content::before,
             .timeline-item:nth-child(even) .timeline-content::before {
                 left: -20px;
                 right: auto;
             }
-            
+
             .timeline-item:nth-child(odd) .timeline-marker,
             .timeline-item:nth-child(even) .timeline-marker {
                 left: -50px;
                 right: auto;
             }
-            
+
             .skills-diagram {
                 height: 300px;
                 order: 2;
                 margin-top: 30px;
             }
-            
+
             .diagram-container {
                 width: 300px;
                 height: 300px;
             }
-            
+
             .web-ring.inner {
                 width: 100px;
                 height: 100px;
             }
-            
+
             .web-ring.outer {
                 width: 200px;
                 height: 200px;
             }
-            
+
             .skill-node {
                 width: 50px;
                 height: 50px;
                 font-size: 1.5rem;
             }
-            
+
             .floating-dock {
                 display: none;
             }
-            
+
             /* Show mobile nav on tablets and phones */
             .mobile-nav {
                 display: block;
             }
-            
+
             /* Hide desktop nav dots on mobile */
             .story-nav {
                 display: none;
             }
-            
+
             .intro-content {
                 text-align: center;
                 margin: 0 auto;
             }
-            
+
             .skill-tags {
                 justify-content: center;
             }
         }
-        
+
         @media (max-width: 768px) {
             .story-section {
                 padding: 20px 5%;
@@ -1176,301 +1406,318 @@
                 scroll-snap-align: none;
                 padding-bottom: 100px;
             }
-            
+
             html {
-                scroll-snap-type: none; /* Disable scroll snap on mobile */
+                scroll-snap-type: none;
+                /* Disable scroll snap on mobile */
             }
-            
+
             .intro-name {
                 font-size: 2.5rem;
             }
-            
+
             .intro-tagline {
                 font-size: 1.3rem;
             }
-            
+
             .intro-description {
                 font-size: 1rem;
                 line-height: 1.6;
             }
-            
-            .exp-title, .projects-title, .edu-title, .contact-title {
+
+            .exp-title,
+            .projects-title,
+            .edu-title,
+            .contact-title {
                 font-size: 2rem;
                 margin-bottom: 40px;
             }
-            
+
             .skills-diagram {
                 height: 250px;
             }
-            
+
             .diagram-container {
                 width: 250px;
                 height: 250px;
             }
-            
+
             .web-ring.inner {
                 width: 80px;
                 height: 80px;
             }
-            
+
             .web-ring.outer {
                 width: 160px;
                 height: 160px;
             }
-            
+
             .skill-node {
                 width: 45px;
                 height: 45px;
                 font-size: 1.3rem;
             }
-            
+
             .skill-tooltip {
                 font-size: 0.75rem;
                 padding: 6px 10px;
                 top: -35px;
             }
-            
+
             .projects-grid {
                 grid-template-columns: 1fr;
                 gap: 20px;
             }
-            
+
             .project-card {
                 margin-bottom: 20px;
             }
-            
+
             .contact-links {
                 flex-direction: column;
                 align-items: center;
                 gap: 25px;
             }
-            
+
             .contact-link {
                 width: 100%;
                 max-width: 200px;
             }
-            
+
             .edu-card {
                 padding: 25px;
             }
-            
+
             .job-header {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 8px;
             }
-            
+
             .terminal-content {
                 font-size: 0.8rem;
             }
-            
+
             .scroll-hint {
                 bottom: 80px;
             }
-            
+
             .mobile-nav-grid {
                 grid-template-columns: repeat(6, 1fr);
             }
-            
+
             .mobile-nav-item {
                 padding: 6px 5px;
             }
-            
+
             .resume-download {
                 margin-top: 60px;
                 margin-bottom: 30px;
             }
         }
-        
+
         @media (max-width: 576px) {
             .intro-name {
                 font-size: 2rem;
             }
-            
+
             .exp-timeline::before {
                 left: 20px;
             }
-            
+
             .timeline-item {
                 width: calc(100% - 60px);
                 left: 60px !important;
                 margin-bottom: 50px;
             }
-            
+
             .timeline-content {
                 padding: 20px;
             }
-            
+
             .timeline-item:nth-child(odd) .timeline-content::before,
             .timeline-item:nth-child(even) .timeline-content::before {
                 left: -15px;
                 width: 15px;
             }
-            
+
             .timeline-item:nth-child(odd) .timeline-marker,
             .timeline-item:nth-child(even) .timeline-marker {
                 left: -40px;
             }
-            
+
             .skills-diagram {
                 height: 200px;
             }
-            
+
             .diagram-container {
                 width: 200px;
                 height: 200px;
             }
-            
+
             .web-ring.inner {
                 width: 60px;
                 height: 60px;
             }
-            
+
             .web-ring.outer {
                 width: 120px;
                 height: 120px;
             }
-            
+
             .skill-node {
                 width: 40px;
                 height: 40px;
                 font-size: 1.1rem;
             }
-            
+
             .skill-tooltip {
                 font-size: 0.7rem;
                 padding: 5px 8px;
                 top: -30px;
             }
-            
+
             .terminal-header {
                 padding-bottom: 8px;
                 margin-bottom: 15px;
             }
-            
+
             .terminal-dot {
                 width: 10px;
                 height: 10px;
             }
-            
+
             .skill-tag {
                 padding: 6px 12px;
                 font-size: 0.8rem;
             }
-            
+
             .project-header h3 {
                 font-size: 1.3rem;
             }
-            
+
             .project-desc {
                 font-size: 0.9rem;
             }
-            
+
             .project-features li {
                 font-size: 0.85rem;
                 margin-bottom: 10px;
             }
-            
+
             .contact-description {
                 font-size: 1rem;
                 line-height: 1.6;
             }
-            
+
             .btn {
                 padding: 14px 28px;
                 font-size: 0.9rem;
             }
-            
+
             .mobile-nav-text {
                 font-size: 0.65rem;
             }
-            
+
             .mobile-nav-icon {
                 font-size: 1rem;
             }
         }
-        
+
         @media (max-width: 400px) {
             .intro-name {
                 font-size: 1.8rem;
             }
-            
+
             .intro-tagline {
                 font-size: 1.1rem;
             }
-            
-            .exp-title, .projects-title, .edu-title, .contact-title {
+
+            .exp-title,
+            .projects-title,
+            .edu-title,
+            .contact-title {
                 font-size: 1.8rem;
             }
-            
+
             .skills-diagram {
                 height: 180px;
             }
-            
+
             .diagram-container {
                 width: 180px;
                 height: 180px;
             }
-            
+
             .web-ring.inner {
                 width: 50px;
                 height: 50px;
             }
-            
+
             .web-ring.outer {
                 width: 100px;
                 height: 100px;
             }
-            
+
             .skill-node {
                 width: 35px;
                 height: 35px;
                 font-size: 1rem;
             }
-            
+
             .skill-tooltip {
                 font-size: 0.65rem;
                 padding: 4px 6px;
                 top: -25px;
             }
-            
+
             .edu-degree {
                 font-size: 1.1rem;
             }
-            
+
             .edu-description {
                 font-size: 0.95rem;
             }
-            
+
             .contact-link {
                 width: 120px;
             }
-            
+
             .contact-icon {
                 width: 60px;
                 height: 60px;
                 font-size: 1.5rem;
             }
-            
+
             .mobile-nav-text {
                 display: none;
             }
-            
+
             .mobile-nav-icon {
                 font-size: 1.1rem;
                 margin-bottom: 2px;
             }
-            
+
             .mobile-nav-item {
                 padding: 5px 3px;
             }
         }
     </style>
 </head>
+
 <body>
+    <!-- Interactive Particle Background -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <i class="fas fa-moon"></i>
+        <i class="fas fa-sun"></i>
+    </button>
+
     <!-- Scroll Progress Indicator -->
     <div class="scroll-progress"></div>
-    
+
     <!-- Floating Dock Navigation (Desktop Only) -->
     <div class="floating-dock" id="floatingDock">
         <div class="dock-tab active" onclick="scrollToSection('intro')">Introduction</div>
@@ -1480,7 +1727,7 @@
         <div class="dock-tab" onclick="scrollToSection('education')">Education</div>
         <div class="dock-tab" onclick="scrollToSection('contact')">Contact</div>
     </div>
-    
+
     <!-- Mobile Navigation Bar (Hidden on Desktop) -->
     <div class="mobile-nav">
         <div class="mobile-nav-grid">
@@ -1510,7 +1757,7 @@
             </a>
         </div>
     </div>
-    
+
     <!-- Storytelling Navigation Dots (Desktop Only) -->
     <div class="story-nav">
         <div class="nav-dot active" onclick="scrollToSection('intro')"></div>
@@ -1520,7 +1767,7 @@
         <div class="nav-dot" onclick="scrollToSection('education')"></div>
         <div class="nav-dot" onclick="scrollToSection('contact')"></div>
     </div>
-    
+
     <!-- Introduction Section -->
     <section class="story-section" id="intro">
         <div class="intro-container">
@@ -1528,67 +1775,69 @@
                 <h1 class="intro-name">Syed Abubaker Ahmed</h1>
                 <div class="intro-tagline">BackEnd Developer & Systems Architect</div>
                 <p class="intro-description">
-                    I build scalable BackEnd systems, REST APIs and data-driven solutions with Spring Boot, Python and cloud technologies. 
-                    My focus is on system reliability, performance optimization, and clean architecture for production applications.
+                    I build scalable BackEnd systems, REST APIs and data-driven solutions with Spring Boot, Python and
+                    cloud technologies.
+                    My focus is on system reliability, performance optimization, and clean architecture for production
+                    applications.
                 </p>
             </div>
-            
+
             <!-- UPDATED Skills Web Diagram with Tooltips & 4 More Skills -->
             <div class="skills-diagram">
                 <div class="diagram-container">
                     <!-- Web rings that go through logo centers -->
                     <div class="web-ring inner"></div>
                     <div class="web-ring outer"></div>
-                    
+
                     <!-- 9 Skill Nodes with Tooltips -->
                     <!-- Spring Boot (Center, on inner ring) -->
                     <div class="skill-node spring" style="top: 50%; left: 50%;">
                         <i class="fas fa-leaf"></i>
                         <div class="skill-tooltip">Spring Boot</div>
                     </div>
-                    
+
                     <!-- Java (Top, on outer ring) - Position adjusted to match outer ring radius -->
                     <div class="skill-node java" style="top: 15%; left: 50%;">
                         <i class="fab fa-java"></i>
                         <div class="skill-tooltip">Java</div>
                     </div>
-                    
+
                     <!-- Python (Right, on outer ring) - Position adjusted to match outer ring radius -->
                     <div class="skill-node python" style="top: 50%; left: 85%;">
                         <i class="fab fa-python"></i>
                         <div class="skill-tooltip">Python</div>
                     </div>
-                    
+
                     <!-- Database (Bottom, on outer ring) - Position adjusted to match outer ring radius -->
                     <div class="skill-node database" style="top: 85%; left: 50%;">
                         <i class="fas fa-database"></i>
                         <div class="skill-tooltip">PostgreSQL/SQL</div>
                     </div>
-                    
+
                     <!-- Docker (Left, on outer ring) - Position adjusted to match outer ring radius -->
                     <div class="skill-node docker" style="top: 50%; left: 15%;">
                         <i class="fab fa-docker"></i>
                         <div class="skill-tooltip">Docker</div>
                     </div>
-                    
+
                     <!-- TensorFlow (Top-Right Diagonal, on inner ring) - Position adjusted to match inner ring radius -->
                     <div class="skill-node tensorflow" style="top: 25%; left: 75%;">
                         <i class="fas fa-brain"></i>
                         <div class="skill-tooltip">TensorFlow</div>
                     </div>
-                    
+
                     <!-- Git (Top-Left Diagonal, on inner ring) - Position adjusted to match inner ring radius -->
                     <div class="skill-node git" style="top: 25%; left: 25%;">
                         <i class="fab fa-git-alt"></i>
                         <div class="skill-tooltip">Git</div>
                     </div>
-                    
+
                     <!-- AWS (Bottom-Left Diagonal, on inner ring) - Position adjusted to match inner ring radius -->
                     <div class="skill-node aws" style="top: 75%; left: 25%;">
                         <i class="fab fa-aws"></i>
                         <div class="skill-tooltip">AWS</div>
                     </div>
-                    
+
                     <!-- Postman (Bottom-Right Diagonal, on inner ring) - Position adjusted to match inner ring radius -->
                     <div class="skill-node postman" style="top: 75%; left: 75%;">
                         <i class="fas fa-paper-plane"></i>
@@ -1597,13 +1846,13 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="scroll-hint">
             <span>Scroll to continue the story</span>
             <i class="fas fa-chevron-down"></i>
         </div>
     </section>
-    
+
     <!-- Skills Section -->
     <section class="story-section" id="skills">
         <div class="skills-container">
@@ -1616,17 +1865,19 @@
                         <span style="margin-left: 10px; font-size: 0.9rem;">backend_systems.sh</span>
                     </div>
                     <div class="terminal-content">
-                        <div class="terminal-line"><span class="terminal-path">~/backend-systems$</span> <span class="terminal-command">status --system-health</span></div>
+                        <div class="terminal-line"><span class="terminal-path">~/backend-systems$</span> <span
+                                class="terminal-command">status --system-health</span></div>
                         <div class="terminal-line">✓ API Gateway: Operational (Spring Boot)</div>
                         <div class="terminal-line">✓ Database Layer: PostgreSQL active</div>
                         <div class="terminal-line">✓ JSON Processing: Jackson configured</div>
-                        <div class="terminal-line">✓ AI Integration: Groq API connected</div>
+                        <div class="terminal-line">✓ AI Integration: LLM Integration connected</div>
                         <div class="terminal-line">✓ Container Runtime: Docker containers running</div>
-                        <div class="terminal-line"><span class="terminal-path">~/backend-systems$</span> <span class="terminal-cursor"></span></div>
+                        <div class="terminal-line"><span class="terminal-path">~/backend-systems$</span> <span
+                                class="terminal-cursor"></span></div>
                     </div>
                 </div>
             </div>
-            
+
             <div class="skills-content">
                 <div class="skill-category">
                     <h3>BackEnd Development</h3>
@@ -1641,20 +1892,20 @@
                         <span class="skill-tag">Error Handling</span>
                     </div>
                 </div>
-                
+
                 <div class="skill-category">
                     <h3>Data & Integration</h3>
                     <div class="skill-tags">
                         <span class="skill-tag">Python</span>
                         <span class="skill-tag">PyTorch</span>
                         <span class="skill-tag">Scikit-Learn</span>
-                        <span class="skill-tag">Groq API</span>
+                        <span class="skill-tag">LLM Integration</span>
                         <span class="skill-tag">JSON Processing</span>
                         <span class="skill-tag">YOLOv8</span>
                         <span class="skill-tag">OpenCV</span>
                     </div>
                 </div>
-                
+
                 <div class="skill-category">
                     <h3>DevOps & Cloud</h3>
                     <div class="skill-tags">
@@ -1670,12 +1921,12 @@
             </div>
         </div>
     </section>
-    
+
     <!-- Experience Section -->
     <section class="story-section" id="experience">
         <div class="exp-container">
             <h2 class="exp-title">Professional Journey</h2>
-            
+
             <div class="exp-timeline">
                 <div class="timeline-item">
                     <div class="timeline-marker"></div>
@@ -1686,9 +1937,10 @@
                         </div>
                         <span class="company">MINE</span>
                         <p class="job-description">
-                            Designing and testing Spring Boot REST APIs with focus on request validation, error handling, and integration.
-                            Debugging and resolving recurring BackEnd and API issues by analyzing logs and stack traces. 
-                            Collaborating with frontend developers to support integration and feature delivery. 
+                            Designing and testing Spring Boot REST APIs with focus on request validation, error
+                            handling, and integration.
+                            Debugging and resolving recurring BackEnd and API issues by analyzing logs and stack traces.
+                            Collaborating with frontend developers to support integration and feature delivery.
                         </p>
                         <div class="tech-stack">
                             <span class="tech-tag">Spring Boot</span>
@@ -1700,7 +1952,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="timeline-item">
                     <div class="timeline-marker"></div>
                     <div class="timeline-content">
@@ -1710,8 +1962,8 @@
                         </div>
                         <span class="company">Aurelio</span>
                         <p class="job-description">
-                            Managing a technical team to build and ship software products. 
-                            Overseeing development processes and project planning. 
+                            Managing a technical team to build and ship software products.
+                            Overseeing development processes and project planning.
                             Leading technical implementation and architecture decisions for scalable BackEnd systems.
                         </p>
                         <div class="tech-stack">
@@ -1724,18 +1976,19 @@
             </div>
         </div>
     </section>
-    
+
     <!-- Projects Section -->
     <section class="story-section" id="projects">
         <div class="projects-container">
             <h2 class="projects-title">Technical Projects</h2>
-            
+
             <div class="projects-grid">
                 <!-- Project 1: YouTube Shorts Automation Uploader -->
                 <div class="project-card">
                     <div class="project-header">
                         <h3>YouTube Shorts Automation Uploader</h3>
-                        <p class="project-desc">Fully automated AI pipeline for generating and uploading short-form videos at scale</p>
+                        <p class="project-desc">Fully automated AI pipeline for generating and uploading short-form
+                            videos at scale</p>
                         <div class="tech-stack">
                             <span class="tech-tag">Python</span>
                             <span class="tech-tag">Groq LLM</span>
@@ -1747,26 +2000,32 @@
                     </div>
                     <div class="project-body">
                         <ul class="project-features">
-                            <li>Engineered an end-to-end automation system for YouTube Shorts using multiple AI services</li>
-                            <li>Orchestrated Groq LLM for idea generation, ComfyUI for image synthesis, and XTTS v2 for voiceovers</li>
-                            <li>Built a fault-tolerant orchestration pipeline with SQLite-based state tracking and recovery</li>
+                            <li>Engineered an end-to-end automation system for YouTube Shorts using multiple AI services
+                            </li>
+                            <li>Orchestrated Groq LLM for idea generation, ComfyUI for image synthesis, and XTTS v2 for
+                                voiceovers</li>
+                            <li>Built a fault-tolerant orchestration pipeline with SQLite-based state tracking and
+                                recovery</li>
                             <li>Implemented FFmpeg-based video assembly for 1080×1920 H.264 short-form videos</li>
                             <li>Designed upload scheduling with randomized delays and optional compilation batching</li>
-                            <li>Enabled production-safe execution with logging, retries, graceful shutdown, and test mode</li>
+                            <li>Enabled production-safe execution with logging, retries, graceful shutdown, and test
+                                mode</li>
                         </ul>
                     </div>
                     <div class="project-footer">
-                        <a href="https://github.com/Syed-Abubaker-Ahmed/Youtube-Shorts-Uploader" target="_blank" class="project-link">
+                        <a href="https://github.com/Syed-Abubaker-Ahmed/Youtube-Shorts-Uploader" target="_blank"
+                            class="project-link">
                             <i class="fab fa-github"></i> View on GitHub
                         </a>
                     </div>
                 </div>
-                
+
                 <!-- Project 2: Smart Search (AI-Powered Semantic Search POC) -->
                 <div class="project-card">
                     <div class="project-header">
                         <h3>Smart Search (AI-Powered Semantic Search POC)</h3>
-                        <p class="project-desc">AI-driven semantic search system with automatic editorial alignment scoring</p>
+                        <p class="project-desc">AI-driven semantic search system with automatic editorial alignment
+                            scoring</p>
                         <div class="tech-stack">
                             <span class="tech-tag">Java</span>
                             <span class="tech-tag">Spring Boot</span>
@@ -1777,30 +2036,35 @@
                     </div>
                     <div class="project-body">
                         <ul class="project-features">
-                            <li>Built a proof-of-concept semantic search engine using hybrid ranking (semantic + keyword)</li>
-                            <li>Implemented automatic alignment scoring without manual tagging using multi-factor evaluation</li>
+                            <li>Built a proof-of-concept semantic search engine using hybrid ranking (semantic +
+                                keyword)</li>
+                            <li>Implemented automatic alignment scoring without manual tagging using multi-factor
+                                evaluation</li>
                             <li>Designed editorial guardrails to filter misaligned content in real time</li>
                             <li>Supported multi-source ingestion with weighted source prioritization</li>
                             <li>Developed REST APIs for search, ingestion, and health monitoring using Spring Boot</li>
-                            <li>Architected a scalable production roadmap leveraging AWS Bedrock, OpenSearch, and Lambda</li>
+                            <li>Architected a scalable production roadmap leveraging AWS Bedrock, OpenSearch, and Lambda
+                            </li>
                         </ul>
                     </div>
                     <div class="project-footer">
-                        <a href="https://github.com/Syed-Abubaker-Ahmed/Smart-Search" target="_blank" class="project-link">
+                        <a href="https://github.com/Syed-Abubaker-Ahmed/Smart-Search" target="_blank"
+                            class="project-link">
                             <i class="fab fa-github"></i> View on GitHub
                         </a>
                     </div>
                 </div>
-                
+
                 <!-- Project 3: Quiz Generator (Java) -->
                 <div class="project-card">
                     <div class="project-header">
                         <h3>Quiz Generator (Java)</h3>
-                        <p class="project-desc">Production-ready Java service that automatically generates quizzes from articles using Groq's AI API</p>
+                        <p class="project-desc">Production-ready Java service that automatically generates quizzes from
+                            articles using Groq's AI API</p>
                         <div class="tech-stack">
                             <span class="tech-tag">Java</span>
                             <span class="tech-tag">Spring Boot</span>
-                            <span class="tech-tag">Groq API</span>
+                            <span class="tech-tag">LLM Integration</span>
                             <span class="tech-tag">Jackson</span>
                             <span class="tech-tag">Maven</span>
                         </div>
@@ -1815,17 +2079,19 @@
                         </ul>
                     </div>
                     <div class="project-footer">
-                        <a href="https://github.com/Syed-Abubaker-Ahmed/Quiz_Generator" target="_blank" class="project-link">
+                        <a href="https://github.com/Syed-Abubaker-Ahmed/Quiz_Generator" target="_blank"
+                            class="project-link">
                             <i class="fab fa-github"></i> View on GitHub
                         </a>
                     </div>
                 </div>
-                
+
                 <!-- Project 4: Vehicle Trajectory Prediction -->
                 <div class="project-card">
                     <div class="project-header">
                         <h3>Vehicle Trajectory Prediction</h3>
-                        <p class="project-desc">BackEnd data processing for short-term vehicle movement prediction with machine learning integration</p>
+                        <p class="project-desc">BackEnd data processing for short-term vehicle movement prediction with
+                            machine learning integration</p>
                         <div class="tech-stack">
                             <span class="tech-tag">Python</span>
                             <span class="tech-tag">PyTorch</span>
@@ -1843,17 +2109,19 @@
                         </ul>
                     </div>
                     <div class="project-footer">
-                        <a href="https://github.com/Syed-Abubaker-Ahmed/Vehicle_Traj" target="_blank" class="project-link">
+                        <a href="https://github.com/Syed-Abubaker-Ahmed/Vehicle_Traj" target="_blank"
+                            class="project-link">
                             <i class="fab fa-github"></i> View on GitHub
                         </a>
                     </div>
                 </div>
-                
+
                 <!-- Project 5: Crash Detection System -->
                 <div class="project-card">
                     <div class="project-header">
                         <h3>Crash Detection System</h3>
-                        <p class="project-desc">BackEnd-driven accident detection pipeline with cloud integration and real-time alerts</p>
+                        <p class="project-desc">BackEnd-driven accident detection pipeline with cloud integration and
+                            real-time alerts</p>
                         <div class="tech-stack">
                             <span class="tech-tag">Python</span>
                             <span class="tech-tag">YOLOv8</span>
@@ -1871,17 +2139,19 @@
                         </ul>
                     </div>
                     <div class="project-footer">
-                        <a href="https://github.com/Syed-Abubaker-Ahmed/Cloud-Accident-Detection" target="_blank" class="project-link">
+                        <a href="https://github.com/Syed-Abubaker-Ahmed/Cloud-Accident-Detection" target="_blank"
+                            class="project-link">
                             <i class="fab fa-github"></i> View on GitHub
                         </a>
                     </div>
                 </div>
-                
+
                 <!-- Project 6: API Development Showcase -->
                 <div class="project-card">
                     <div class="project-header">
                         <h3>API Development Showcase</h3>
-                        <p class="project-desc">Collection of Spring Boot REST APIs demonstrating BackEnd development patterns and best practices</p>
+                        <p class="project-desc">Collection of Spring Boot REST APIs demonstrating BackEnd development
+                            patterns and best practices</p>
                         <div class="tech-stack">
                             <span class="tech-tag">Spring Boot</span>
                             <span class="tech-tag">REST APIs</span>
@@ -1905,12 +2175,12 @@
             </div>
         </div>
     </section>
-    
+
     <!-- Education Section -->
     <section class="story-section" id="education">
         <div class="edu-container">
             <h2 class="edu-title">Education</h2>
-            
+
             <div class="edu-card">
                 <div class="edu-icon">
                     <i class="fas fa-graduation-cap"></i>
@@ -1921,24 +2191,28 @@
                     <div class="edu-date">2021 - 2025</div>
                 </div>
                 <p class="edu-description">
-                    Focused on computer science fundamentals, software engineering principles, and BackEnd system design. 
-                    Coursework included data structures, algorithms, database systems, distributed computing, and software architecture.
+                    Focused on computer science fundamentals, software engineering principles, and BackEnd system
+                    design.
+                    Coursework included data structures, algorithms, database systems, distributed computing, and
+                    software architecture.
                 </p>
             </div>
         </div>
     </section>
-    
+
     <!-- Contact Section -->
     <section class="story-section" id="contact">
         <div class="contact-container">
             <h2 class="contact-title">Let's Connect</h2>
-            
+
             <p class="contact-description">
-                I'm actively seeking <span style="color: var(--primary); font-weight: 600;">BackEnd and Software Development roles</span> where I can contribute to building scalable systems, 
-                designing robust APIs, and solving complex technical challenges. Open to opportunities that leverage Spring Boot, 
+                I'm actively seeking <span style="color: var(--primary); font-weight: 600;">BackEnd and Software
+                    Development roles</span> where I can contribute to building scalable systems,
+                designing robust APIs, and solving complex technical challenges. Open to opportunities that leverage
+                Spring Boot,
                 cloud technologies, and data-intensive applications.
             </p>
-            
+
             <div class="contact-links">
                 <a href="https://github.com/Syed-Abubaker-Ahmed" target="_blank" class="contact-link">
                     <div class="contact-icon">
@@ -1946,14 +2220,14 @@
                     </div>
                     <span>GitHub</span>
                 </a>
-                
+
                 <a href="https://www.linkedin.com/in/syed-abubaker-ahmed/" target="_blank" class="contact-link">
                     <div class="contact-icon">
                         <i class="fab fa-linkedin"></i>
                     </div>
                     <span>LinkedIn</span>
                 </a>
-                
+
                 <a href="mailto:sabubakerahmed@gmail.com" class="contact-link">
                     <div class="contact-icon">
                         <i class="fas fa-envelope"></i>
@@ -1961,7 +2235,7 @@
                     <span>Email</span>
                 </a>
             </div>
-            
+
             <div class="resume-download">
                 <a href="Syed Abubaker Ahmed.pdf" class="btn btn-primary" download>
                     <i class="fas fa-download"></i> Download Resume (PDF)
@@ -1969,17 +2243,17 @@
             </div>
         </div>
     </section>
-    
+
     <!-- JavaScript -->
     <script>
         // Check if device is mobile
         function isMobileDevice() {
             return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
         }
-        
+
         // Scroll progress indicator
         const scrollProgress = document.querySelector('.scroll-progress');
-        
+
         // Navigation elements
         const dockTabs = document.querySelectorAll('.dock-tab');
         const navDots = document.querySelectorAll('.nav-dot');
@@ -1987,37 +2261,37 @@
         const sections = document.querySelectorAll('.story-section');
         const scrollHint = document.querySelector('.scroll-hint');
         const floatingDock = document.getElementById('floatingDock');
-        
+
         // Variables for dock visibility control
         let dockVisible = false;
         let dockTimeout = null;
         let lastScrollTop = 0;
-        let mouseY = 0;
-        
+        let dockMouseY = 0;
+
         // Update active navigation based on scroll position
         function updateActiveNav() {
             let currentSection = '';
             const scrollPos = window.scrollY + window.innerHeight / 3;
-            
+
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
                 const sectionHeight = section.clientHeight;
-                
+
                 if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
                     currentSection = section.id;
                 }
             });
-            
+
             // Update dock tabs (desktop only)
             if (!isMobileDevice()) {
                 dockTabs.forEach(tab => {
                     tab.classList.remove('active');
-                    if (tab.textContent.toLowerCase().includes(currentSection) || 
+                    if (tab.textContent.toLowerCase().includes(currentSection) ||
                         (currentSection === 'intro' && tab.textContent === 'Introduction')) {
                         tab.classList.add('active');
                     }
                 });
-                
+
                 // Update nav dots (desktop only)
                 navDots.forEach(dot => {
                     dot.classList.remove('active');
@@ -2026,7 +2300,7 @@
                     }
                 });
             }
-            
+
             // Update mobile nav items
             mobileNavItems.forEach(item => {
                 item.classList.remove('active');
@@ -2034,60 +2308,60 @@
                     item.classList.add('active');
                 }
             });
-            
+
             // Hide scroll hint after scrolling past intro
             if (currentSection !== 'intro' && scrollHint) {
                 scrollHint.classList.add('hidden');
             } else if (scrollHint) {
                 scrollHint.classList.remove('hidden');
             }
-            
+
             // Update scroll progress
             const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
             const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
             const scrolled = (winScroll / height) * 100;
             scrollProgress.style.transform = `scaleX(${scrolled / 100})`;
         }
-        
+
         // Show floating dock (desktop only)
         function showDock() {
             if (isMobileDevice()) return;
-            
+
             if (!dockVisible) {
                 floatingDock.classList.add('visible');
                 dockVisible = true;
             }
-            
+
             // Clear any existing timeout
             if (dockTimeout) {
                 clearTimeout(dockTimeout);
             }
-            
+
             // Set timeout to hide dock after 3 seconds of inactivity
             dockTimeout = setTimeout(() => {
                 // Only hide if mouse is not near the top
-                if (mouseY > 100) {
+                if (dockMouseY > 100) {
                     floatingDock.classList.remove('visible');
                     dockVisible = false;
                 }
             }, 3000);
         }
-        
+
         // Hide floating dock (desktop only)
         function hideDock() {
             if (isMobileDevice()) return;
-            
+
             // Only hide if scrolling down and mouse is not near top
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            
-            if (scrollTop > lastScrollTop && mouseY > 100 && scrollTop > 100) {
+
+            if (scrollTop > lastScrollTop && dockMouseY > 100 && scrollTop > 100) {
                 floatingDock.classList.remove('visible');
                 dockVisible = false;
             }
-            
+
             lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
         }
-        
+
         // Scroll to section function
         function scrollToSection(sectionId) {
             const section = document.getElementById(sectionId);
@@ -2102,20 +2376,20 @@
                 }
             }
         }
-        
+
         // Handle mobile nav click
         function handleMobileNavClick(element, sectionId) {
             // Update active state
             mobileNavItems.forEach(item => item.classList.remove('active'));
             element.classList.add('active');
-            
+
             // Scroll to section
             scrollToSection(sectionId);
-            
+
             // Prevent default anchor behavior
             return false;
         }
-        
+
         // Initialize terminal typing effect
         function initTerminalTyping() {
             const terminalLines = document.querySelectorAll('.terminal-line');
@@ -2126,16 +2400,16 @@
                 line.style.animation = `typing 0.5s steps(40, end) ${0.3 + index * 0.3}s forwards, blink 1s ${0.8 + index * 0.3}s infinite`;
             });
         }
-        
+
         // Initialize web diagram animations
         function initWebDiagram() {
             const skillNodes = document.querySelectorAll('.skill-node');
-            
+
             skillNodes.forEach((node, index) => {
                 // Initial hidden state
                 node.style.opacity = '0';
                 node.style.transform = 'translate(-50%, -50%) scale(0)';
-                
+
                 // Animate in with delay
                 setTimeout(() => {
                     node.style.transition = 'all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
@@ -2143,7 +2417,7 @@
                     node.style.transform = 'translate(-50%, -50%) scale(1)';
                 }, 500 + index * 150);
             });
-            
+
             // Add connecting lines animation
             const webRings = document.querySelectorAll('.web-ring');
             webRings.forEach((ring, index) => {
@@ -2154,14 +2428,14 @@
                 }, 300 + index * 200);
             });
         }
-        
+
         // Initialize scroll animations
         function initScrollAnimations() {
             const observerOptions = {
                 threshold: 0.2,
                 rootMargin: '0px 0px -50px 0px'
             };
-            
+
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -2169,41 +2443,41 @@
                     }
                 });
             }, observerOptions);
-            
+
             // Observe elements for animation
             document.querySelectorAll('.timeline-item, .project-card, .edu-card').forEach(el => {
                 observer.observe(el);
             });
         }
-        
+
         // Track mouse position for dock visibility (desktop only)
         if (!isMobileDevice()) {
             document.addEventListener('mousemove', (e) => {
-                mouseY = e.clientY;
-                
+                dockMouseY = e.clientY;
+
                 // Show dock when mouse moves near the top
-                if (mouseY < 100) {
+                if (dockMouseY < 100) {
                     showDock();
                 }
             });
-            
+
             // Show dock on mouse enter
             floatingDock.addEventListener('mouseenter', showDock);
         }
-        
+
         // Initialize everything when page loads
         window.addEventListener('load', () => {
             initTerminalTyping();
             initWebDiagram();
             initScrollAnimations();
             updateActiveNav();
-            
+
             // Show dock initially (desktop only)
             if (!isMobileDevice()) {
                 setTimeout(showDock, 1000);
             }
         });
-        
+
         // Update on scroll
         window.addEventListener('scroll', () => {
             updateActiveNav();
@@ -2211,16 +2485,16 @@
                 hideDock();
             }
         });
-        
+
         // Smooth scroll for anchor links (desktop only)
         if (!isMobileDevice()) {
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
+                anchor.addEventListener('click', function (e) {
                     e.preventDefault();
-                    
+
                     const targetId = this.getAttribute('href');
                     if (targetId === '#') return;
-                    
+
                     const targetElement = document.querySelector(targetId);
                     if (targetElement) {
                         targetElement.scrollIntoView({
@@ -2230,11 +2504,217 @@
                 });
             });
         }
-        
+
         // Disable hover effects on mobile for better touch experience
         if (isMobileDevice()) {
             document.body.classList.add('mobile');
         }
+
+        // ===== THEME TOGGLE =====
+        const themeToggle = document.getElementById('themeToggle');
+
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? '' : 'light';
+
+            if (newTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'dark');
+            }
+
+            // Update particle colors
+            if (typeof updateParticleColors === 'function') {
+                updateParticleColors();
+            }
+        });
+
+        // ===== INTERACTIVE PARTICLE BACKGROUND =====
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let particles = [];
+        let mouseX = 0;
+        let mouseY = 0;
+        let animationId = null;
+
+        // Get computed colors from CSS variables
+        function getParticleColor() {
+            return getComputedStyle(document.documentElement).getPropertyValue('--particle-color').trim() || 'rgba(0, 217, 255, 0.6)';
+        }
+
+        function getLineColor() {
+            return getComputedStyle(document.documentElement).getPropertyValue('--particle-line').trim() || 'rgba(0, 217, 255, 0.15)';
+        }
+
+        // Resize canvas
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        // Particle class
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.baseSpeedX = (Math.random() - 0.5) * 0.5;
+                this.baseSpeedY = -Math.random() * 0.5 - 0.2; // Upward drift (antigravity)
+                this.speedX = this.baseSpeedX;
+                this.speedY = this.baseSpeedY;
+                this.opacity = Math.random() * 0.5 + 0.3;
+            }
+
+            update() {
+                // Mouse interaction - repulsion effect
+                const dx = mouseX - this.x;
+                const dy = mouseY - this.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                const maxDistance = 150;
+
+                if (distance < maxDistance && distance > 0) {
+                    const force = (maxDistance - distance) / maxDistance;
+                    const angle = Math.atan2(dy, dx);
+                    this.speedX = this.baseSpeedX - Math.cos(angle) * force * 2;
+                    this.speedY = this.baseSpeedY - Math.sin(angle) * force * 2;
+                } else {
+                    // Gradually return to base speed
+                    this.speedX += (this.baseSpeedX - this.speedX) * 0.02;
+                    this.speedY += (this.baseSpeedY - this.speedY) * 0.02;
+                }
+
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                // Wrap around screen edges
+                if (this.y < -10) {
+                    this.y = canvas.height + 10;
+                    this.x = Math.random() * canvas.width;
+                }
+                if (this.y > canvas.height + 10) {
+                    this.y = -10;
+                }
+                if (this.x < -10) {
+                    this.x = canvas.width + 10;
+                }
+                if (this.x > canvas.width + 10) {
+                    this.x = -10;
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = getParticleColor();
+                ctx.globalAlpha = this.opacity;
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        // Initialize particles
+        function initParticles() {
+            const particleCount = isMobileDevice() ? 40 : 80;
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        // Draw connecting lines between nearby particles
+        function drawConnections() {
+            const maxDistance = 120;
+            ctx.strokeStyle = getLineColor();
+            ctx.lineWidth = 0.5;
+
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < maxDistance) {
+                        ctx.globalAlpha = 1 - (distance / maxDistance);
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            ctx.globalAlpha = 1;
+        }
+
+        // Animation loop
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            drawConnections();
+
+            animationId = requestAnimationFrame(animate);
+        }
+
+        // Update particle colors (called when theme changes)
+        function updateParticleColors() {
+            // Colors update automatically via getParticleColor() and getLineColor()
+        }
+
+        // Mouse tracking
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        // Touch tracking for mobile
+        // Touch tracking for mobile
+        document.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 0) {
+                mouseX = e.touches[0].clientX;
+                mouseY = e.touches[0].clientY;
+            }
+        }, { passive: true });
+
+        // Clear interaction on touch end
+        document.addEventListener('touchend', () => {
+            mouseX = -1000;
+            mouseY = -1000;
+        });
+
+        document.addEventListener('touchcancel', () => {
+            mouseX = -1000;
+            mouseY = -1000;
+        });
+
+        // Initialize particle system
+        window.addEventListener('load', () => {
+            resizeCanvas();
+            initParticles();
+            animate();
+        });
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            initParticles();
+        });
     </script>
 </body>
+
 </html>
