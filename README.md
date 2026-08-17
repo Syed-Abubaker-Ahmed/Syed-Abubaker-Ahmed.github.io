@@ -1,99 +1,61 @@
-# Syed Abubaker Ahmed — Backend Developer Portfolio
+# Syed Abubaker Ahmed — Business Analyst Portfolio
 
-An interactive single-page developer portfolio showcasing backend engineering skills, system architecture expertise, professional experience, and technical projects. Built using pure HTML, CSS, and JavaScript with a strong focus on performance, responsiveness, and clean design.
+A single-page portfolio for a Business Analyst with a software engineering background: requirements,
+process analysis, data modelling and delivery planning, with the technical specs written in-house rather
+than handed off to a separate engineering team.
+
+Live at [Syed-Abubaker-Ahmed.github.io](https://syed-abubaker-ahmed.github.io).
 
 ---
 
 ## Overview
 
-This portfolio presents a narrative-style walkthrough of my profile as a Backend Developer and Systems Architect. It highlights real-world projects, professional experience, and core technical skills using modern UI patterns and smooth animations.
-
-The site is fully responsive and optimized for desktop, tablet, and mobile devices.
-
----
+One self-contained `index.html` — no frameworks, no build step, no external requests. The variable font is
+embedded directly in the file, so the page renders and works fully offline after the first load.
 
 ## Features
 
-- Floating desktop navigation and mobile bottom navigation
-- Scroll-based section tracking and progress indicator
-- Interactive skills web with tooltips
-- Animated terminal-style skill visualization
-- Timeline-based professional experience section
-- Project cards with GitHub links
-- Education and contact sections
-- Resume download support
-- Fully responsive layout
-- Built with zero frameworks
-
----
+- Fixed identity rail on desktop (collapses to a top bar with a menu on mobile)
+- Scroll-driven reveal animations via native CSS (`animation-timeline`), with a small JS fallback for
+  browsers that don't yet support it
+- Hero load-in sequence and parallax drift, section-heading wipe reveals
+- Animated count-up on the proof-point statistics
+- Cursor-follow marker on pointer devices
+- One embedded variable font (Recursive) supplying both the display sans and the monospace accents from a
+  single file
+- Fully responsive, keyboard-accessible, respects `prefers-reduced-motion` and `prefers-color-scheme`
 
 ## Tech Stack
 
-- HTML5
-- CSS3 (custom variables, animations, responsive layouts)
-- Vanilla JavaScript
-- Font Awesome
-- Google Fonts (Inter, JetBrains Mono)
-
----
+- HTML5 + CSS3 (custom properties, native scroll-driven animations)
+- Vanilla JavaScript (progressive enhancement only — nothing on the page depends on it to be readable)
+- [Recursive](https://www.recursive.design/) variable font (OFL), embedded as base64 `woff2`
+- Zero frameworks, zero external requests
 
 ## Project Structure
 
 ```
 ├── index.html
-├── Syed Abubaker Ahmed.pdf
-└── README.md
+└── Syed Abubaker Ahmed.pdf
 ```
-
----
-
-## How to Run
-
-### Open Locally
-```bash
-open index.html
-```
-or simply double-click the file.
-
-### Using Live Server
-```bash
-npm install -g live-server
-live-server
-```
-
----
-
-## Responsive Design
-
-- **Desktop**: Floating dock navigation with animated interactions
-- **Tablet**: Adaptive grid layout and optimized navigation
-- **Mobile**: Bottom navigation bar with touch-friendly interactions
-
----
 
 ## Sections
 
-- Introduction
-- Skills
+- About
 - Experience
 - Projects
 - Education
 - Contact
 
----
+## Résumé
 
-## Resume
-
-The resume can be downloaded directly from the website:  
-[Syed Abubaker Ahmed.pdf](Syed Abubaker Ahmed.pdf)
-
----
+Downloadable directly from the site's contact section, or here: [Syed Abubaker Ahmed.pdf](Syed%20Abubaker%20Ahmed.pdf)
 
 ## Contact
 
-- **GitHub**: [https://github.com/Syed-Abubaker-Ahmed](https://github.com/Syed-Abubaker-Ahmed)
-- **LinkedIn**: [https://www.linkedin.com/in/syed-abubaker-ahmed/](https://www.linkedin.com/in/syed-abubaker-ahmed/)
 - **Email**: sabubakerahmed@gmail.com
+- **LinkedIn**: [linkedin.com/in/syed-abubaker-ahmed](https://www.linkedin.com/in/syed-abubaker-ahmed/)
+- **GitHub**: [github.com/Syed-Abubaker-Ahmed](https://github.com/Syed-Abubaker-Ahmed)
 
 ---
 
