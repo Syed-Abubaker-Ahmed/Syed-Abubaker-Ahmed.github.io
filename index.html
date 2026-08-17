@@ -103,31 +103,34 @@
 
   :focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
 
-  /* ---------- Reveal: native CSS scroll-timeline where supported ---------- */
+  /* ---------- Reveal: native CSS scroll-timeline where supported ----------
+     Opacity never drops below .6 and the range resolves within the first
+     ~18% of the element entering view, so content is always legible and
+     never sits "half in" for long, on any viewport. */
   @media (prefers-reduced-motion: no-preference){
     @supports (animation-timeline: view()){
       .reveal{
         animation:rise-in linear both;
         animation-timeline:view();
-        animation-range:entry 10% cover 45%;
+        animation-range:entry 0% cover 18%;
       }
     }
   }
   @keyframes rise-in{
-    from{opacity:0;transform:translateY(28px) scale(.98);}
-    to{opacity:1;transform:translateY(0) scale(1);}
+    from{opacity:.6;transform:translateY(16px);}
+    to{opacity:1;transform:translateY(0);}
   }
 
   /* ---------- Reveal fallback: JS-driven for browsers without animation-timeline ---------- */
   .reveal-js .reveal{
-    opacity:0;
-    transform:translateY(28px) scale(.98);
-    transition:opacity .5s cubic-bezier(.16,1,.3,1), transform .5s cubic-bezier(.16,1,.3,1);
-    transition-delay:calc(var(--reveal-i, 0) * 70ms);
+    opacity:.6;
+    transform:translateY(16px);
+    transition:opacity .4s ease-out, transform .4s ease-out;
+    transition-delay:calc(var(--reveal-i, 0) * 60ms);
   }
   .reveal-js .reveal.is-visible{
     opacity:1;
-    transform:translateY(0) scale(1);
+    transform:translateY(0);
   }
   .reveal-js.reduced-motion .reveal{
     opacity:1;
@@ -186,21 +189,7 @@
   }
 
 
-  /* ---------- Hero: load-in sequence (time-based, not scroll-linked) ---------- */
-  @media (prefers-reduced-motion: no-preference){
-    .hero-anim{
-      opacity:0;transform:translateY(16px);
-      animation:hero-in .8s cubic-bezier(.16,1,.3,1) both;
-    }
-    .hero .kicker.hero-anim{animation-delay:.02s;}
-    .hero .display.hero-anim{animation-delay:.12s;}
-    .hero .body-lg.hero-anim{animation-delay:.28s;}
-    .hero .status.hero-anim{animation-delay:.42s;}
-    .hero .hero-links.hero-anim{animation-delay:.52s;}
-  }
-  @keyframes hero-in{ from{opacity:0;transform:translateY(16px);} to{opacity:1;transform:translateY(0);} }
-
-  /* ---------- Hero: parallax drift as the page scrolls past it ---------- */
+  /* ---------- Hero: parallax drift as the page scrolls past it (scroll-linked only, nothing plays on load) ---------- */
   .hero{overflow:clip;}
   @media (prefers-reduced-motion: no-preference){
     @supports (animation-timeline: scroll()){
@@ -213,7 +202,7 @@
   }
   @keyframes hero-drift{
     from{transform:translateY(0);opacity:1;}
-    to{transform:translateY(70px);opacity:.35;}
+    to{transform:translateY(50px);opacity:.7;}
   }
 
   /* ---------- Section heading wipe reveal ---------- */
@@ -222,7 +211,7 @@
       h2.section-title{
         animation:wipe-in linear both;
         animation-timeline:view();
-        animation-range:entry 0% cover 25%;
+        animation-range:entry 0% cover 15%;
       }
     }
   }
@@ -237,12 +226,12 @@
       .exp-list li, .proj-list li{
         animation:rise-in-li linear both;
         animation-timeline:view();
-        animation-range:entry 0% cover 20%;
+        animation-range:entry 0% cover 12%;
       }
     }
   }
   @keyframes rise-in-li{
-    from{opacity:0;transform:translateX(-12px);}
+    from{opacity:.6;transform:translateX(-8px);}
     to{opacity:1;transform:translateX(0);}
   }
 
@@ -430,14 +419,24 @@
     .proj-row-meta{align-items:flex-start;text-align:left;}
     .proj-row-meta .stack-line{text-align:left;}
     @keyframes rise-in{
-      from{opacity:0;transform:translateY(14px) scale(.99);}
-      to{opacity:1;transform:translateY(0) scale(1);}
+      from{opacity:.65;transform:translateY(10px);}
+      to{opacity:1;transform:translateY(0);}
     }
-    .reveal-js .reveal{transform:translateY(14px) scale(.99);}
+    .reveal-js .reveal{transform:translateY(10px);}
     @keyframes hero-drift{
       from{transform:translateY(0);opacity:1;}
-      to{transform:translateY(30px);opacity:.6;}
+      to{transform:translateY(24px);opacity:.85;}
     }
+
+    /* ---------- Mobile layout: break the plain single-column stack up a little ---------- */
+    .proof-row{display:grid;grid-template-columns:1fr 1fr;gap:28px 20px;}
+    .proof-item{max-width:none;}
+    .proof-item:nth-child(odd){border-left:2px solid var(--accent);padding-left:14px;}
+    .proof-item:nth-child(even){border-left:2px solid var(--line);padding-left:14px;margin-top:22px;}
+
+    .exp-entry{border-left:2px solid var(--line);padding-left:18px;}
+    .proj-featured{border-left:2px solid var(--accent);padding-left:18px;}
+    .proj-row:nth-child(even){padding-left:14px;border-left:2px solid var(--line);}
   }
   @media (max-width:479px){
     .display{font-size:clamp(2.1rem,9vw,2.6rem);}
@@ -513,14 +512,14 @@
   <!-- ================= HERO ================= -->
   <section class="hero">
     <div class="hero-parallax">
-      <p class="kicker hero-anim">Business Analyst · Product Analyst · Systems Analyst</p>
-      <h1 class="display hero-anim">Syed Abubaker Ahmed</h1>
-      <p class="body-lg hero-anim">
+      <p class="kicker">Business Analyst · Product Analyst · Systems Analyst</p>
+      <h1 class="display">Syed Abubaker Ahmed</h1>
+      <p class="body-lg">
         I run requirements, process analysis, data modelling and delivery planning, and I write the technical
         specs myself instead of handing requirements to a separate engineering team.
       </p>
-      <p class="status mono hero-anim">Dammam, Saudi Arabia · Transferable Iqama · On-site, hybrid, remote</p>
-      <div class="hero-links hero-anim">
+      <p class="status mono">Dammam, Saudi Arabia · Transferable Iqama · On-site, hybrid, remote</p>
+      <div class="hero-links">
         <a class="textlink accent-link" href="#contact">Get in touch</a>
         <a class="textlink" href="Syed Abubaker Ahmed.pdf" download>Download résumé</a>
         <a class="textlink" href="#projects">View projects</a>
