@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Syed Abubaker Ahmed · Business Analyst</title>
-<meta name="description" content="Syed Abubaker Ahmed, Business Analyst with a software engineering background. Requirements, process analysis, data modelling and delivery planning, backed by hands-on technical specs.">
+<title data-i18n="meta.title">Syed Abubaker Ahmed · Business Analyst</title>
+<meta id="metaDescription" name="description" content="Syed Abubaker Ahmed, Business Analyst with a software engineering background. Requirements, process analysis, data modelling and delivery planning, backed by hands-on technical specs.">
 <style>
   @font-face{
     font-family:'Recursive';
@@ -102,6 +102,22 @@
   a.accent-link{color:var(--accent);}
 
   :focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
+
+  /* Clip-based hide, not a huge negative offset — the old left:-9999px technique
+     computes an enormous scrollable area under dir="rtl" (9999 + viewport width),
+     which pushes the whole page out of the visible scrollport. This is also the
+     first time the skip link actually becomes visible on keyboard focus. */
+  .visually-hidden-focusable{
+    position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+    clip:rect(0,0,0,0);white-space:nowrap;border:0;
+  }
+  .visually-hidden-focusable:focus{
+    position:fixed;top:12px;left:12px;width:auto;height:auto;padding:10px 16px;
+    margin:0;overflow:visible;clip:auto;white-space:normal;
+    background:var(--paper);color:var(--ink);border:1px solid var(--accent);
+    border-radius:8px;z-index:100;font-weight:600;
+  }
+  [dir="rtl"] .visually-hidden-focusable:focus{left:auto;right:12px;}
 
   /* ---------- Reveal: native CSS scroll-timeline where supported ----------
      Opacity never drops below .6 and the range resolves within the first
@@ -267,9 +283,17 @@
   .rail-nav a.active .bar{width:36px;background:var(--accent);}
   .rail-nav a.active .n{color:var(--accent);}
 
-  .rail-foot{display:flex;gap:18px;margin-top:48px;}
+  .rail-foot{display:flex;gap:18px;align-items:center;margin-top:48px;}
   .rail-foot a{color:var(--ink-faint);transition:color .15s ease;}
   .rail-foot a:hover, .rail-foot a:focus-visible{color:var(--accent);}
+
+  .lang-toggle{
+    font-variation-settings:'MONO' 1;font-weight:600;font-size:0.72rem;letter-spacing:0.04em;
+    color:var(--ink-faint);background:none;border:1px solid var(--line);border-radius:999px;
+    padding:5px 12px;cursor:pointer;transition:color .15s ease,border-color .15s ease;
+    min-height:28px;
+  }
+  .lang-toggle:hover, .lang-toggle:focus-visible{color:var(--accent);border-color:var(--accent);}
 
   .rail-toggle, .topbar, .mobile-panel{display:none;}
   #menu-check{position:absolute;opacity:0;pointer-events:none;}
@@ -377,6 +401,42 @@
   footer .shell{display:flex;}
   footer p{max-width:var(--outer-max);margin-left:calc(var(--rail-w));padding-left:0;}
 
+  /* ================= RTL / Arabic ================= */
+  /* Recursive (the embedded variable font) has no Arabic glyphs, so Arabic mode
+     switches to a system Arabic-capable stack rather than shipping a second embedded
+     font — a zero-cost default, per DESIGN.md's own open question on this. */
+  [lang="ar"]{
+    font-family:"Segoe UI","Tahoma","Geeza Pro","Noto Sans Arabic",system-ui,sans-serif;
+  }
+  /* Tracking that reads fine on Latin mono/small-caps text breaks Arabic letter joining. */
+  [lang="ar"] .mono, [lang="ar"] .kicker, [lang="ar"] .lang-toggle{letter-spacing:0;}
+  /* Fields that stay in English by design (stack lists, canonical skill names, contact
+     details, the person's name) keep left-to-right reading order even inside an RTL page. */
+  [dir="rtl"] .stack-line, [dir="rtl"] .exp-skills,
+  [dir="rtl"] .skills-grid dd, [dir="rtl"] .contact-list a,
+  [dir="rtl"] .rail-top .name, [dir="rtl"] .topbar .name, [dir="rtl"] .hero .display{
+    direction:ltr;unicode-bidi:isolate;
+  }
+  [dir="rtl"] .skills-grid dd, [dir="rtl"] .stack-line, [dir="rtl"] .exp-skills{text-align:right;}
+
+  [dir="rtl"] .rail{left:auto;right:0;}
+  [dir="rtl"] main{margin-left:0;margin-right:var(--rail-w);}
+  [dir="rtl"] footer p{margin-left:0;margin-right:var(--rail-w);}
+  [dir="rtl"] .rail-nav a .n{margin-left:0;}
+  [dir="rtl"] .exp-entry, [dir="rtl"] .edu-entry{direction:rtl;}
+  [dir="rtl"] .proof-item, [dir="rtl"] .exp-entry, [dir="rtl"] .proj-featured{border-left:none;}
+  @media (min-width:768px){
+    [dir="rtl"] .proof-item:nth-child(odd), [dir="rtl"] .exp-entry, [dir="rtl"] .proj-featured{border-left:none;}
+  }
+  [dir="rtl"] .contact-list li{flex-direction:row-reverse;}
+  [dir="rtl"] .exp-list li, [dir="rtl"] .proj-list li{padding-left:0;padding-right:18px;}
+  [dir="rtl"] .exp-list li::before, [dir="rtl"] .proj-list li::before{left:auto;right:0;}
+
+  @media (max-width:1023px){
+    [dir="rtl"] main{margin-right:0;}
+    [dir="rtl"] footer p{margin-right:0;}
+  }
+
   /* ================= Responsive ================= */
   @media (max-width:1023px){
     .rail{display:none;}
@@ -391,6 +451,7 @@
       border-bottom:1px solid var(--line);
     }
     .topbar .name{font-weight:700;font-size:1rem;}
+    .topbar-actions{display:flex;align-items:center;gap:10px;}
     .menu-btn{
       display:flex;align-items:center;justify-content:center;
       width:44px;height:44px;background:none;border:1px solid var(--line);border-radius:8px;
@@ -438,6 +499,12 @@
     .exp-entry{border-left:2px solid var(--line);padding-left:18px;}
     .proj-featured{border-left:2px solid var(--accent);padding-left:18px;}
     .proj-row{padding-left:14px;border-left:2px solid var(--line);}
+
+    [dir="rtl"] .proof-item:nth-child(odd){border-left:none;border-right:2px solid var(--accent);padding-left:0;padding-right:14px;}
+    [dir="rtl"] .proof-item:nth-child(even){border-left:none;border-right:2px solid var(--line);padding-left:0;padding-right:14px;}
+    [dir="rtl"] .exp-entry{border-left:none;border-right:2px solid var(--line);padding-left:0;padding-right:18px;}
+    [dir="rtl"] .proj-featured{border-left:none;border-right:2px solid var(--accent);padding-left:0;padding-right:18px;}
+    [dir="rtl"] .proj-row{padding-left:0;padding-right:14px;border-left:none;border-right:2px solid var(--line);}
   }
   @media (max-width:479px){
     .display{font-size:clamp(2.1rem,9vw,2.6rem);}
@@ -450,27 +517,27 @@
 <div class="scroll-progress" aria-hidden="true"></div>
 <div class="cursor-dot" aria-hidden="true"></div>
 
-<a href="#main" class="visually-hidden-focusable" style="position:absolute;left:-9999px;">Skip to content</a>
+<a href="#main" class="visually-hidden-focusable" data-i18n="a11y.skipLink">Skip to content</a>
 
 <!-- ============ Desktop identity rail ============ -->
 <aside class="rail">
   <div class="rail-top">
     <div class="name">Syed Abubaker Ahmed</div>
-    <div class="role">Business Analyst</div>
-    <p class="blurb">Business Analyst with a software engineering background, based in Dammam, Saudi Arabia.</p>
+    <div class="role" data-i18n="identity.role">Business Analyst</div>
+    <p class="blurb" data-i18n="identity.blurb">Business Analyst with a software engineering background, based in Dammam, Saudi Arabia.</p>
 
     <nav aria-label="Section">
       <ul class="rail-nav">
-        <li><a href="#about" data-nav><span class="n">01</span><span class="bar"></span>About</a></li>
-        <li><a href="#experience" data-nav><span class="n">02</span><span class="bar"></span>Experience</a></li>
-        <li><a href="#projects" data-nav><span class="n">03</span><span class="bar"></span>Projects</a></li>
-        <li><a href="#contact" data-nav><span class="n">04</span><span class="bar"></span>Contact</a></li>
+        <li><a href="#about" data-nav><span class="n">01</span><span class="bar"></span><span data-i18n="nav.about">About</span></a></li>
+        <li><a href="#experience" data-nav><span class="n">02</span><span class="bar"></span><span data-i18n="nav.experience">Experience</span></a></li>
+        <li><a href="#projects" data-nav><span class="n">03</span><span class="bar"></span><span data-i18n="nav.projects">Projects</span></a></li>
+        <li><a href="#contact" data-nav><span class="n">04</span><span class="bar"></span><span data-i18n="nav.contact">Contact</span></a></li>
       </ul>
     </nav>
   </div>
 
   <div class="rail-foot">
-    <a href="mailto:sabubakerahmed@gmail.com" aria-label="Email">
+    <a href="mailto:sabubakerahmed@gmail.com" aria-label="Email" data-i18n-aria="a11y.email">
       <svg class="icon" viewBox="0 0 24 24"><path d="m3 7 9 6 9-6"/><rect x="3" y="5" width="18" height="14" rx="2"/></svg>
     </a>
     <a href="https://www.linkedin.com/in/syed-abubaker-ahmed/" target="_blank" rel="noopener" aria-label="LinkedIn">
@@ -479,9 +546,10 @@
     <a href="https://github.com/Syed-Abubaker-Ahmed" target="_blank" rel="noopener" aria-label="GitHub">
       <svg class="icon" viewBox="0 0 24 24"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
     </a>
-    <a href="Syed Abubaker Ahmed.pdf" download aria-label="Download résumé">
+    <a href="Syed Abubaker Ahmed.pdf" download aria-label="Download résumé" data-i18n-aria="a11y.resume">
       <svg class="icon" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
     </a>
+    <button type="button" class="lang-toggle" id="langToggle" aria-label="العربية / English">العربية</button>
   </div>
 </aside>
 
@@ -489,21 +557,24 @@
 <input type="checkbox" id="menu-check">
 <div class="topbar">
   <span class="name">Syed Abubaker Ahmed</span>
-  <label class="menu-btn" for="menu-check" aria-label="Toggle menu">
-    <svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
-  </label>
+  <div class="topbar-actions">
+    <button type="button" class="lang-toggle" id="langToggleMobile" aria-label="العربية / English">العربية</button>
+    <label class="menu-btn" for="menu-check" aria-label="Toggle menu" data-i18n-aria="a11y.menuToggle">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </label>
+  </div>
 </div>
 <div class="mobile-panel">
   <div class="mobile-panel-inner">
-    <a class="nav-link" href="#about">About</a>
-    <a class="nav-link" href="#experience">Experience</a>
-    <a class="nav-link" href="#projects">Projects</a>
-    <a class="nav-link" href="#contact">Contact</a>
+    <a class="nav-link" href="#about" data-i18n="nav.about">About</a>
+    <a class="nav-link" href="#experience" data-i18n="nav.experience">Experience</a>
+    <a class="nav-link" href="#projects" data-i18n="nav.projects">Projects</a>
+    <a class="nav-link" href="#contact" data-i18n="nav.contact">Contact</a>
     <div class="mobile-social">
-      <a href="mailto:sabubakerahmed@gmail.com" aria-label="Email"><svg class="icon" viewBox="0 0 24 24"><path d="m3 7 9 6 9-6"/><rect x="3" y="5" width="18" height="14" rx="2"/></svg></a>
+      <a href="mailto:sabubakerahmed@gmail.com" aria-label="Email" data-i18n-aria="a11y.email"><svg class="icon" viewBox="0 0 24 24"><path d="m3 7 9 6 9-6"/><rect x="3" y="5" width="18" height="14" rx="2"/></svg></a>
       <a href="https://www.linkedin.com/in/syed-abubaker-ahmed/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg class="icon" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4V8h4v1.5A5 5 0 0 1 16 8Z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
       <a href="https://github.com/Syed-Abubaker-Ahmed" target="_blank" rel="noopener" aria-label="GitHub"><svg class="icon" viewBox="0 0 24 24"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a>
-      <a href="Syed Abubaker Ahmed.pdf" download aria-label="Download résumé"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg></a>
+      <a href="Syed Abubaker Ahmed.pdf" download aria-label="Download résumé" data-i18n-aria="a11y.resume"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg></a>
     </div>
   </div>
 </div>
@@ -513,37 +584,37 @@
   <!-- ================= HERO ================= -->
   <section class="hero">
     <div class="hero-parallax">
-      <p class="kicker">Business Analyst · Product Analyst · Systems Analyst</p>
+      <p class="kicker" data-i18n="hero.kicker">Business Analyst · Product Analyst · Systems Analyst</p>
       <h1 class="display">Syed Abubaker Ahmed</h1>
-      <p class="body-lg">
+      <p class="body-lg" data-i18n="hero.lede">
         I run requirements, process analysis, data modelling and delivery planning, and I write the technical
         specs myself instead of handing requirements to a separate engineering team.
       </p>
-      <p class="status mono">Dammam, Saudi Arabia · Transferable Iqama · On-site, hybrid, remote</p>
+      <p class="status mono" data-i18n="hero.status">Dammam, Saudi Arabia · Transferable Iqama · On-site, hybrid, remote</p>
       <div class="hero-links">
-        <a class="textlink accent-link" href="#contact">Get in touch</a>
-        <a class="textlink" href="Syed Abubaker Ahmed.pdf" download>Download résumé</a>
-        <a class="textlink" href="#projects">View projects</a>
+        <a class="textlink accent-link" href="#contact" data-i18n="hero.cta.contact">Get in touch</a>
+        <a class="textlink" href="Syed Abubaker Ahmed.pdf" download data-i18n="hero.cta.resume">Download résumé</a>
+        <a class="textlink" href="#projects" data-i18n="hero.cta.projects">View projects</a>
       </div>
     </div>
   </section>
 
   <!-- ================= ABOUT ================= -->
   <section id="about" class="reveal">
-    <div class="section-head"><span class="n">01</span><h2 class="section-title">About</h2></div>
+    <div class="section-head"><span class="n">01</span><h2 class="section-title" data-i18n="about.heading">About</h2></div>
 
     <div class="about-copy">
-      <p>
+      <p data-i18n="about.p1">
         The schema, the access rules and the delivery plan come from the same person who mapped the process.
         That's the differentiator underneath the Business Analyst title: an engineering background applied in
         service of the analysis, not the other way around.
       </p>
-      <p>
+      <p data-i18n="about.p2">
         Currently working across two domains: an operations SaaS platform moving toward multi-tenant delivery,
         and product delivery for mobile games as the founder of a small studio. Each domain is context for one
         employer, not the framing for the work itself.
       </p>
-      <p>
+      <p data-i18n="about.p3">
         I've also helped startups grow into functioning businesses: Aurelio Game Studio, which I founded and
         have since made self-sustaining by defining its operating roles and handoff processes and matching the
         right people to them, so it now runs independently of day-to-day founder involvement, and Gulf Loads,
@@ -553,84 +624,84 @@
     </div>
 
     <dl class="meta-list">
-      <div><dt>Target roles</dt><dd>Business Analyst, Product Analyst, Systems Analyst</dd></div>
-      <div><dt>Currently across</dt><dd>Operations SaaS, product delivery for mobile games</dd></div>
-      <div><dt>Work</dt><dd>On-site, hybrid or remote. Driving licence available.</dd></div>
-      <div><dt>Based</dt><dd>Dammam, Saudi Arabia. Transferable Iqama, India citizen.</dd></div>
+      <div><dt data-i18n="about.meta.targetRoles.label">Target roles</dt><dd data-i18n="about.meta.targetRoles.value">Business Analyst, Product Analyst, Systems Analyst</dd></div>
+      <div><dt data-i18n="about.meta.currentlyAcross.label">Currently across</dt><dd data-i18n="about.meta.currentlyAcross.value">Operations SaaS, product delivery for mobile games</dd></div>
+      <div><dt data-i18n="about.meta.work.label">Work</dt><dd data-i18n="about.meta.work.value">On-site, hybrid or remote. Driving licence available.</dd></div>
+      <div><dt data-i18n="about.meta.based.label">Based</dt><dd data-i18n="about.meta.based.value">Dammam, Saudi Arabia. Transferable Iqama, India citizen.</dd></div>
     </dl>
 
     <div class="skills-block">
       <dl class="skills-grid">
-        <div><dt>Business Analysis</dt><dd>Requirements Gathering, Process Analysis, Data Modeling, Solution Design, Gap Analysis, RBAC Requirements</dd></div>
-        <div><dt>Delivery &amp; Stakeholders</dt><dd>Stakeholder Management, Phased Delivery Planning, Product Roadmapping, Agile/Scrum, Technical Specifications, Vendor Evaluation, Business Registration &amp; Compliance, Organizational Design, Operational Efficiency</dd></div>
-        <div><dt>Data &amp; Reporting</dt><dd>SQL, Power BI, Excel, Reporting, Data Import/Migration, PostgreSQL</dd></div>
-        <div><dt>Technical Background</dt><dd>Java, Spring Boot, Python, Node.js, REST API, Microservices, Multi-Tenant SaaS, Docker, CI/CD, Git, AWS/GCP</dd></div>
+        <div><dt data-i18n="skills.businessAnalysis.label">Business Analysis</dt><dd>Requirements Gathering, Process Analysis, Data Modeling, Solution Design, Gap Analysis, RBAC Requirements</dd></div>
+        <div><dt data-i18n="skills.delivery.label">Delivery &amp; Stakeholders</dt><dd>Stakeholder Management, Phased Delivery Planning, Product Roadmapping, Agile/Scrum, Technical Specifications, Vendor Evaluation, Business Registration &amp; Compliance, Organizational Design, Operational Efficiency</dd></div>
+        <div><dt data-i18n="skills.data.label">Data &amp; Reporting</dt><dd data-i18n="skills.data.value">SQL, Power BI, Excel, Reporting, Data Import/Migration, PostgreSQL</dd></div>
+        <div><dt data-i18n="skills.technical.label">Technical Background</dt><dd data-i18n="skills.technical.value">Java, Spring Boot, Python, Node.js, REST API, Microservices, Multi-Tenant SaaS, Docker, CI/CD, Git, AWS/GCP</dd></div>
       </dl>
     </div>
 
     <div class="proof-row reveal">
-      <div class="proof-item"><div class="fig"><span class="count" data-to="14">0</span> · <span class="count" data-to="38">0</span></div><div class="lbl">Clients and truck suppliers in the data model</div><div class="src">Gulf Loads</div></div>
-      <div class="proof-item"><div class="fig">500K → 1M SAR</div><div class="lbl">Monthly sales growth, doubling operational efficiency</div><div class="src">Gulf Loads</div></div>
-      <div class="proof-item"><div class="fig"><span class="count" data-to="97">0</span>%</div><div class="lbl">Fewer draw call batches, 3,000 → 81</div><div class="src">Poly Overtake</div></div>
-      <div class="proof-item"><div class="fig">Zero</div><div class="lbl">Critical defects after launch</div><div class="src">Poly Overtake</div></div>
-      <div class="proof-item"><div class="fig"><span class="count" data-to="18">0</span></div><div class="lbl">Production issues root-caused</div><div class="src">MINE</div></div>
-      <div class="proof-item"><div class="fig"><span class="count" data-to="20">0</span></div><div class="lbl">Spring Boot endpoints standardised</div><div class="src">MINE</div></div>
-      <div class="proof-item"><div class="fig"><span class="count" data-to="97.5" data-decimals="1">0.0</span>%</div><div class="lbl">Crash detection accuracy, 1.5% false positives</div><div class="src">Crash Detection</div></div>
-      <div class="proof-item"><div class="fig"><span class="count" data-to="1.99" data-decimals="2">0.00</span> m</div><div class="lbl">Trajectory ADE, vs. 3.55 m / 2.27 m baselines</div><div class="src">Vehicle Trajectory</div></div>
+      <div class="proof-item"><div class="fig"><span class="count" data-to="14">0</span> · <span class="count" data-to="38">0</span></div><div class="lbl" data-i18n="proof.network.label">Clients and truck suppliers in the data model</div><div class="src">Gulf Loads</div></div>
+      <div class="proof-item"><div class="fig">500K → 1M SAR</div><div class="lbl" data-i18n="proof.sales.label">Monthly sales growth, doubling operational efficiency</div><div class="src">Gulf Loads</div></div>
+      <div class="proof-item"><div class="fig"><span class="count" data-to="97">0</span>%</div><div class="lbl" data-i18n="proof.rendering.label">Fewer draw call batches, 3,000 → 81</div><div class="src">Poly Overtake</div></div>
+      <div class="proof-item"><div class="fig" data-i18n="proof.defects.fig">Zero</div><div class="lbl" data-i18n="proof.defects.label">Critical defects after launch</div><div class="src">Poly Overtake</div></div>
+      <div class="proof-item"><div class="fig"><span class="count" data-to="18">0</span></div><div class="lbl" data-i18n="proof.issues.label">Production issues root-caused</div><div class="src">MINE</div></div>
+      <div class="proof-item"><div class="fig"><span class="count" data-to="20">0</span></div><div class="lbl" data-i18n="proof.endpoints.label">Spring Boot endpoints standardised</div><div class="src">MINE</div></div>
+      <div class="proof-item"><div class="fig"><span class="count" data-to="97.5" data-decimals="1">0.0</span>%</div><div class="lbl" data-i18n="proof.crash.label">Crash detection accuracy, 1.5% false positives</div><div class="src">Crash Detection</div></div>
+      <div class="proof-item"><div class="fig"><span class="count" data-to="1.99" data-decimals="2">0.00</span> m</div><div class="lbl" data-i18n="proof.trajectory.label">Trajectory ADE, vs. 3.55 m / 2.27 m baselines</div><div class="src">Vehicle Trajectory</div></div>
     </div>
   </section>
 
   <!-- ================= EXPERIENCE ================= -->
   <section id="experience">
-    <div class="section-head"><span class="n">02</span><h2 class="section-title">Experience</h2></div>
+    <div class="section-head"><span class="n">02</span><h2 class="section-title" data-i18n="experience.heading">Experience</h2></div>
 
     <article class="exp-entry reveal">
-      <div class="exp-when mono">Jul 2026 – Present<br>Dammam (on-site)</div>
+      <div class="exp-when mono" data-i18n="exp.gulfloads.when" data-i18n-html="br">Jul 2026 – Present<br>Dammam (on-site)</div>
       <div>
-        <div class="exp-role-row"><h3 class="entry-title">Business Analyst</h3></div>
+        <div class="exp-role-row"><h3 class="entry-title" data-i18n="exp.gulfloads.role">Business Analyst</h3></div>
         <div class="exp-org">Gulf Loads</div>
         <ul class="exp-list">
-          <li>Reviewed operational workflows across client onboarding, supplier sourcing, route assignment and load tracking, all run manually, then gathered requirements and translated freight coordination logic (multi-truck loads, trade routes, client-supplier relationships) into data models the team could actually use.</li>
-          <li>Defined the phased delivery plan (internal admin-provisioned slice vs. self-service tenant signup slice) and the role-based access control / tenant-isolation requirements as the platform moved toward multi-tenant SaaS, and evaluated payment processor options for its billing model.</li>
-          <li>Owns system architecture, data import/export standards and reporting requirements directly, writing the technical specs rather than handing them off to a separate engineering team.</li>
-          <li>Built Excel-based import templates and entity relationship models to standardise how load, driver and route data is captured and migrated, covering a growing network of 14 clients and 38 truck suppliers.</li>
-          <li>Helped scale Gulf Loads' monthly sales from 500,000 SAR to 1,000,000 SAR, doubling operational efficiency in the process.</li>
+          <li data-i18n="exp.gulfloads.bullet1">Reviewed operational workflows across client onboarding, supplier sourcing, route assignment and load tracking, all run manually, then gathered requirements and translated freight coordination logic (multi-truck loads, trade routes, client-supplier relationships) into data models the team could actually use.</li>
+          <li data-i18n="exp.gulfloads.bullet2">Defined the phased delivery plan (internal admin-provisioned slice vs. self-service tenant signup slice) and the role-based access control / tenant-isolation requirements as the platform moved toward multi-tenant SaaS, and evaluated payment processor options for its billing model.</li>
+          <li data-i18n="exp.gulfloads.bullet3">Owns system architecture, data import/export standards and reporting requirements directly, writing the technical specs rather than handing them off to a separate engineering team.</li>
+          <li data-i18n="exp.gulfloads.bullet4">Built Excel-based import templates and entity relationship models to standardise how load, driver and route data is captured and migrated, covering a growing network of 14 clients and 38 truck suppliers.</li>
+          <li data-i18n="exp.gulfloads.bullet5">Helped scale Gulf Loads' monthly sales from 500,000 SAR to 1,000,000 SAR, doubling operational efficiency in the process.</li>
         </ul>
         <p class="exp-skills mono">Requirements Gathering, Process Analysis, Data Modeling, Multi-Tenant SaaS, RBAC, Phased Delivery, Vendor Evaluation, Operational Efficiency, Excel</p>
       </div>
     </article>
 
     <article class="exp-entry reveal">
-      <div class="exp-when mono">Nov 2025 – Present<br>Remote</div>
+      <div class="exp-when mono" data-i18n="exp.aurelio.when" data-i18n-html="br">Nov 2025 – Present<br>Remote</div>
       <div>
-        <div class="exp-role-row"><h3 class="entry-title">Business Analyst</h3><span class="tag-inline">Founder</span></div>
+        <div class="exp-role-row"><h3 class="entry-title" data-i18n="exp.aurelio.role">Business Analyst</h3><span class="tag-inline" data-i18n="exp.aurelio.tag">Founder</span></div>
         <div class="exp-org">Aurelio Game Studio</div>
         <ul class="exp-list">
-          <li>Founded the studio and built it from an idea into an active operation: strategy, product roadmaps and team structure across development, art and design, including business registration/compliance (UDYAM, MCA SPICe+ evaluation) and the founders' equity structure (DVR/SVR shares, ESOP, vesting).</li>
-          <li>Drove requirements and the UI/UX specification for a new mobile title, defining the full screen set needed to pass iOS/Play Store submission and ad-network approval, and coordinated design/UI contributors to deliver it.</li>
-          <li>Authored the studio's privacy policy and terms &amp; conditions to generically cover current and future titles, and scoped a licensing opportunity to bring a third-party puzzle game to mobile.</li>
-          <li>Runs requirements gathering across developers, artists and designers, prioritises features against gameplay goals and release timelines, then assigns tasks and tracks deliverables to keep milestones on schedule.</li>
-          <li>Defined the requirements and performance targets behind Poly Overtake, shipped to Google Play with zero critical defects after launch.</li>
-          <li>Defined the studio's operating roles and handoff processes, then matched the right people to them, making the studio self-sustaining and able to run independently without day-to-day founder involvement.</li>
+          <li data-i18n="exp.aurelio.bullet1">Founded the studio and built it from an idea into an active operation: strategy, product roadmaps and team structure across development, art and design, including business registration/compliance (UDYAM, MCA SPICe+ evaluation) and the founders' equity structure (DVR/SVR shares, ESOP, vesting).</li>
+          <li data-i18n="exp.aurelio.bullet2">Drove requirements and the UI/UX specification for a new mobile title, defining the full screen set needed to pass iOS/Play Store submission and ad-network approval, and coordinated design/UI contributors to deliver it.</li>
+          <li data-i18n="exp.aurelio.bullet3">Authored the studio's privacy policy and terms &amp; conditions to generically cover current and future titles, and scoped a licensing opportunity to bring a third-party puzzle game to mobile.</li>
+          <li data-i18n="exp.aurelio.bullet4">Runs requirements gathering across developers, artists and designers, prioritises features against gameplay goals and release timelines, then assigns tasks and tracks deliverables to keep milestones on schedule.</li>
+          <li data-i18n="exp.aurelio.bullet5">Defined the requirements and performance targets behind Poly Overtake, shipped to Google Play with zero critical defects after launch.</li>
+          <li data-i18n="exp.aurelio.bullet6">Defined the studio's operating roles and handoff processes, then matched the right people to them, making the studio self-sustaining and able to run independently without day-to-day founder involvement.</li>
         </ul>
         <p class="exp-skills mono">Product Roadmapping, UI/UX Requirements, Store Compliance, Stakeholder Management, Business Registration &amp; Compliance, Release Planning, Organizational Design</p>
       </div>
     </article>
 
     <article class="exp-entry reveal">
-      <div class="exp-when mono">Apr 2025 – Jan 2026<br>Remote, USA</div>
+      <div class="exp-when mono" data-i18n="exp.mine.when" data-i18n-html="br">Apr 2025 – Jan 2026<br>Remote, USA</div>
       <div>
-        <div class="exp-role-row"><h3 class="entry-title">Backend Support Engineer</h3><span class="tag-inline">Contract</span></div>
+        <div class="exp-role-row"><h3 class="entry-title" data-i18n="exp.mine.role">Backend Support Engineer</h3><span class="tag-inline" data-i18n="exp.mine.tag">Contract</span></div>
         <div class="exp-org">MINE</div>
         <ul class="exp-list">
-          <li>Traced and documented root causes for 18 recurring production backend issues, tracked fixes through Agile sprint cycles, and built automated API test pipelines in Java and Postman wired into the team's CI/CD workflow.</li>
-          <li>Defined API contract standards for 20 Spring Boot endpoints (request validation, response schemas, error handling), which cut support escalations, and worked Agile standups with frontend and QA to align contracts and catch mismatches before production.</li>
+          <li data-i18n="exp.mine.bullet1">Traced and documented root causes for 18 recurring production backend issues, tracked fixes through Agile sprint cycles, and built automated API test pipelines in Java and Postman wired into the team's CI/CD workflow.</li>
+          <li data-i18n="exp.mine.bullet2">Defined API contract standards for 20 Spring Boot endpoints (request validation, response schemas, error handling), which cut support escalations, and worked Agile standups with frontend and QA to align contracts and catch mismatches before production.</li>
         </ul>
         <p class="exp-skills mono">API Contract Standards, Root Cause Analysis, Agile/Scrum, Spring Boot, Postman, CI/CD</p>
       </div>
     </article>
 
-    <p class="overlap-note">
+    <p class="overlap-note" data-i18n="exp.overlapNote">
       Gulf Loads and Aurelio Game Studio both run to "Present"; the MINE contract ran alongside Aurelio Game
       Studio until January 2026. These are three concurrent tracks, not a sequential timeline.
     </p>
@@ -638,39 +709,39 @@
 
   <!-- ================= PROJECTS ================= -->
   <section id="projects">
-    <div class="section-head"><span class="n">03</span><h2 class="section-title">Projects</h2></div>
+    <div class="section-head"><span class="n">03</span><h2 class="section-title" data-i18n="projects.heading">Projects</h2></div>
 
     <article class="proj-featured reveal">
       <div class="proj-top">
         <h3 class="entry-title">Mirfak Ops <span class="mono" style="font-weight:400;color:var(--ink-faint);">· Gulf Loads</span></h3>
-        <span class="proj-status">Production · Internal</span>
+        <span class="proj-status" data-i18n="proj.mirfak.status">Production · Internal</span>
       </div>
-      <p class="proj-desc">Multi-tenant operations and invoice management SaaS, built end to end, with Gulf Loads as its first tenant. No public link, internal platform.</p>
+      <p class="proj-desc" data-i18n="proj.mirfak.desc">Multi-tenant operations and invoice management SaaS, built end to end, with Gulf Loads as its first tenant. No public link, internal platform.</p>
       <p class="stack-line">React/Vite, Express, Prisma, PostgreSQL, Capacitor (Android), MapLibre</p>
       <ul class="proj-list">
-        <li>Multi-truck load tracking with client/supplier pricing, payment status and profit calculation</li>
-        <li>Drag-and-drop route builder with MapLibre visualisation for trade route planning</li>
-        <li>Excel import pipeline with fuzzy column matching and alias-driven entity merging to migrate legacy manual records</li>
-        <li>Server-side role-based permissions with tenant isolation enforced via a Prisma client extension</li>
-        <li>Bilingual (EN/AR) automated reminders for payment and delivery follow-ups</li>
-        <li>Automated cross-tenant test in CI to verify isolation holds</li>
+        <li data-i18n="proj.mirfak.bullet1">Multi-truck load tracking with client/supplier pricing, payment status and profit calculation</li>
+        <li data-i18n="proj.mirfak.bullet2">Drag-and-drop route builder with MapLibre visualisation for trade route planning</li>
+        <li data-i18n="proj.mirfak.bullet3">Excel import pipeline with fuzzy column matching and alias-driven entity merging to migrate legacy manual records</li>
+        <li data-i18n="proj.mirfak.bullet4">Server-side role-based permissions with tenant isolation enforced via a Prisma client extension</li>
+        <li data-i18n="proj.mirfak.bullet5">Bilingual (EN/AR) automated reminders for payment and delivery follow-ups</li>
+        <li data-i18n="proj.mirfak.bullet6">Automated cross-tenant test in CI to verify isolation holds</li>
       </ul>
     </article>
 
     <article class="proj-featured reveal">
       <div class="proj-top">
         <h3 class="entry-title">Poly Overtake</h3>
-        <a class="textlink accent-link proj-status" href="https://play.google.com/store/apps/details?id=com.aureliogamestudio.polyovertake&hl=en" target="_blank" rel="noopener">View on Google Play</a>
+        <a class="textlink accent-link proj-status" href="https://play.google.com/store/apps/details?id=com.aureliogamestudio.polyovertake&hl=en" target="_blank" rel="noopener" data-i18n="proj.poly.linkText">View on Google Play</a>
       </div>
-      <p class="proj-desc">Mobile racing game shipped to Google Play with zero critical defects after launch; requirements, UI/UX spec and store compliance owned end to end.</p>
+      <p class="proj-desc" data-i18n="proj.poly.desc">Mobile racing game shipped to Google Play with zero critical defects after launch; requirements, UI/UX spec and store compliance owned end to end.</p>
       <p class="stack-line">Requirements, UI/UX Spec, Store Compliance, Unity, C#, Google AdMob</p>
       <ul class="proj-list">
-        <li>Defined requirements and performance targets, tracked through to a zero-critical-defect launch</li>
-        <li>Specified the full screen set required to pass Play Store submission and ad-network approval</li>
-        <li>Diagnosed a rendering bottleneck and defined the fix that cut draw call batches from 3,000 to 81 (97% reduction)</li>
-        <li>Scoped AdMob/GPGS SDK integrations and OAuth flows as monetisation and sign-in requirements</li>
-        <li>Managed the Play Console release workflow: store listing, compliance, app-ads.txt, privacy messaging</li>
-        <li>Ran internal and closed testing phases before production release</li>
+        <li data-i18n="proj.poly.bullet1">Defined requirements and performance targets, tracked through to a zero-critical-defect launch</li>
+        <li data-i18n="proj.poly.bullet2">Specified the full screen set required to pass Play Store submission and ad-network approval</li>
+        <li data-i18n="proj.poly.bullet3">Diagnosed a rendering bottleneck and defined the fix that cut draw call batches from 3,000 to 81 (97% reduction)</li>
+        <li data-i18n="proj.poly.bullet4">Scoped AdMob/GPGS SDK integrations and OAuth flows as monetisation and sign-in requirements</li>
+        <li data-i18n="proj.poly.bullet5">Managed the Play Console release workflow: store listing, compliance, app-ads.txt, privacy messaging</li>
+        <li data-i18n="proj.poly.bullet6">Ran internal and closed testing phases before production release</li>
       </ul>
     </article>
 
@@ -678,57 +749,57 @@
       <div class="proj-row reveal">
         <div class="proj-row-main">
           <h3>YouTube Shorts Automation Uploader</h3>
-          <p>Fully automated AI pipeline for generating and uploading short-form video at scale.</p>
+          <p data-i18n="proj.shorts.desc">Fully automated AI pipeline for generating and uploading short-form video at scale.</p>
         </div>
         <div class="proj-row-meta">
-          <a class="textlink" href="https://github.com/Syed-Abubaker-Ahmed/Youtube-Shorts-Uploader" target="_blank" rel="noopener">View on GitHub</a>
+          <a class="textlink" href="https://github.com/Syed-Abubaker-Ahmed/Youtube-Shorts-Uploader" target="_blank" rel="noopener" data-i18n="proj.shorts.linkText">View on GitHub</a>
           <p class="stack-line">Python, Groq LLM, ComfyUI, XTTS v2, FFmpeg, SQLite</p>
         </div>
       </div>
       <div class="proj-row reveal">
         <div class="proj-row-main">
           <h3>Smart Search</h3>
-          <p>AI-powered semantic search POC with automatic editorial alignment scoring.</p>
+          <p data-i18n="proj.smartsearch.desc">AI-powered semantic search POC with automatic editorial alignment scoring.</p>
         </div>
         <div class="proj-row-meta">
-          <a class="textlink" href="https://github.com/Syed-Abubaker-Ahmed/Smart-Search" target="_blank" rel="noopener">View on GitHub</a>
+          <a class="textlink" href="https://github.com/Syed-Abubaker-Ahmed/Smart-Search" target="_blank" rel="noopener" data-i18n="proj.shorts.linkText">View on GitHub</a>
           <p class="stack-line">Java, Spring Boot, Semantic Search, TF-IDF, REST APIs</p>
         </div>
       </div>
       <div class="proj-row reveal">
         <div class="proj-row-main">
           <h3>Quiz Generator (Java)</h3>
-          <p>Java service that generates quizzes from articles using Groq's API.</p>
+          <p data-i18n="proj.quiz.desc">Java service that generates quizzes from articles using Groq's API.</p>
         </div>
         <div class="proj-row-meta">
-          <a class="textlink" href="https://github.com/Syed-Abubaker-Ahmed/Quiz_Generator" target="_blank" rel="noopener">View on GitHub</a>
+          <a class="textlink" href="https://github.com/Syed-Abubaker-Ahmed/Quiz_Generator" target="_blank" rel="noopener" data-i18n="proj.shorts.linkText">View on GitHub</a>
           <p class="stack-line">Java, Spring Boot, LLM Integration, Jackson, Maven</p>
         </div>
       </div>
       <div class="proj-row reveal">
         <div class="proj-row-main">
           <h3>Vehicle Trajectory Prediction</h3>
-          <p>Data processing and modelling pipeline for short-term vehicle movement prediction.</p>
+          <p data-i18n="proj.trajectory.desc">Data processing and modelling pipeline for short-term vehicle movement prediction.</p>
         </div>
         <div class="proj-row-meta">
-          <a class="textlink" href="https://github.com/Syed-Abubaker-Ahmed/Vehicle_Traj" target="_blank" rel="noopener">View on GitHub</a>
+          <a class="textlink" href="https://github.com/Syed-Abubaker-Ahmed/Vehicle_Traj" target="_blank" rel="noopener" data-i18n="proj.shorts.linkText">View on GitHub</a>
           <p class="stack-line">Python, PyTorch, Scikit-Learn</p>
         </div>
       </div>
       <div class="proj-row reveal">
         <div class="proj-row-main">
           <h3>Crash Detection System</h3>
-          <p>Accident detection pipeline with multiframe validation, cloud integration and real-time alerting.</p>
+          <p data-i18n="proj.crash.desc">Accident detection pipeline with multiframe validation, cloud integration and real-time alerting.</p>
         </div>
         <div class="proj-row-meta">
-          <a class="textlink" href="https://github.com/Syed-Abubaker-Ahmed/Cloud-Accident-Detection" target="_blank" rel="noopener">View on GitHub</a>
+          <a class="textlink" href="https://github.com/Syed-Abubaker-Ahmed/Cloud-Accident-Detection" target="_blank" rel="noopener" data-i18n="proj.shorts.linkText">View on GitHub</a>
           <p class="stack-line">Python, YOLOv8, OpenCV, Cloud APIs</p>
         </div>
       </div>
       <div class="proj-row reveal">
         <div class="proj-row-main">
           <h3>API Development Showcase</h3>
-          <p>Collection of Spring Boot REST APIs demonstrating backend patterns. Multiple repositories, no single link.</p>
+          <p data-i18n="proj.apishowcase.desc">Collection of Spring Boot REST APIs demonstrating backend patterns. Multiple repositories, no single link.</p>
         </div>
         <div class="proj-row-meta">
           <p class="stack-line">Spring Boot, REST APIs, Java, PostgreSQL</p>
@@ -739,13 +810,13 @@
 
   <!-- ================= EDUCATION ================= -->
   <section id="education">
-    <div class="section-head"><span class="n">·</span><h2 class="section-title">Education</h2></div>
+    <div class="section-head"><span class="n">·</span><h2 class="section-title" data-i18n="education.heading">Education</h2></div>
     <div class="edu-entry reveal">
       <div class="exp-when mono">2021 – 2025</div>
       <div>
-        <h3 class="entry-title">B.Tech, Computer Science and Engineering</h3>
+        <h3 class="entry-title" data-i18n="education.title">B.Tech, Computer Science and Engineering</h3>
         <div class="edu-org">Vellore Institute of Technology (VIT), Vellore, India</div>
-        <p class="edu-copy">
+        <p class="edu-copy" data-i18n="education.copy">
           Coursework relevant to the current positioning: data structures, algorithms, database systems,
           distributed computing, software engineering, software architecture and system design: the technical
           base applied to data modelling, solution design and writing specs engineering teams can build from.
@@ -756,17 +827,17 @@
 
   <!-- ================= CONTACT ================= -->
   <section id="contact">
-    <div class="section-head"><span class="n">04</span><h2 class="section-title">Contact</h2></div>
-    <p class="contact-copy">
+    <div class="section-head"><span class="n">04</span><h2 class="section-title" data-i18n="contact.heading">Contact</h2></div>
+    <p class="contact-copy" data-i18n="contact.copy">
       Open to Business Analyst, Product Analyst and Systems Analyst roles, on-site, hybrid or remote. Reach out
       directly or download the résumé for the full record.
     </p>
     <a class="email-cta" href="mailto:sabubakerahmed@gmail.com">sabubakerahmed@gmail.com</a>
     <ul class="contact-list">
-      <li><span class="lbl">Phone</span><a href="tel:+966572817896">+966 57 281 7896</a></li>
+      <li><span class="lbl" data-i18n="contact.phone.label">Phone</span><a href="tel:+966572817896">+966 57 281 7896</a></li>
       <li><span class="lbl">LinkedIn</span><a href="https://www.linkedin.com/in/syed-abubaker-ahmed/" target="_blank" rel="noopener">linkedin.com/in/syed-abubaker-ahmed</a></li>
       <li><span class="lbl">GitHub</span><a href="https://github.com/Syed-Abubaker-Ahmed" target="_blank" rel="noopener">github.com/Syed-Abubaker-Ahmed</a></li>
-      <li><span class="lbl">Résumé</span><a href="Syed Abubaker Ahmed.pdf" download>Syed Abubaker Ahmed.pdf</a></li>
+      <li><span class="lbl" data-i18n="contact.resume.label">Résumé</span><a href="Syed Abubaker Ahmed.pdf" download>Syed Abubaker Ahmed.pdf</a></li>
     </ul>
   </section>
 
@@ -897,6 +968,53 @@
     requestAnimationFrame(raf);
   }
   requestAnimationFrame(raf);
+})();
+
+(function(){
+  var I18N = { en: {"meta.title":"Syed Abubaker Ahmed · Business Analyst","meta.description":"Syed Abubaker Ahmed, Business Analyst with a software engineering background. Requirements, process analysis, data modelling and delivery planning, backed by hands-on technical specs.","identity.name":"Syed Abubaker Ahmed","identity.role":"Business Analyst","identity.blurb":"Business Analyst with a software engineering background, based in Dammam, Saudi Arabia.","nav.about":"About","nav.experience":"Experience","nav.projects":"Projects","nav.contact":"Contact","a11y.email":"Email","a11y.linkedin":"LinkedIn","a11y.github":"GitHub","a11y.resume":"Download résumé","a11y.menuToggle":"Toggle menu","a11y.skipLink":"Skip to content","hero.kicker":"Business Analyst · Product Analyst · Systems Analyst","hero.headline":"Syed Abubaker Ahmed","hero.lede":"I run requirements, process analysis, data modelling and delivery planning, and I write the technical specs myself instead of handing requirements to a separate engineering team.","hero.status":"Dammam, Saudi Arabia · Transferable Iqama · On-site, hybrid, remote","hero.cta.contact":"Get in touch","hero.cta.resume":"Download résumé","hero.cta.projects":"View projects","about.heading":"About","about.p1":"The schema, the access rules and the delivery plan come from the same person who mapped the process. That's the differentiator underneath the Business Analyst title: an engineering background applied in service of the analysis, not the other way around.","about.p2":"Currently working across two domains: an operations SaaS platform moving toward multi-tenant delivery, and product delivery for mobile games as the founder of a small studio. Each domain is context for one employer, not the framing for the work itself.","about.p3":"I've also helped startups grow into functioning businesses: Aurelio Game Studio, which I founded and have since made self-sustaining by defining its operating roles and handoff processes and matching the right people to them, so it now runs independently of day-to-day founder involvement, and Gulf Loads, whose monthly sales I helped grow from 500,000 SAR to 1,000,000 SAR, doubling operational efficiency in the process.","about.meta.targetRoles.label":"Target roles","about.meta.targetRoles.value":"Business Analyst, Product Analyst, Systems Analyst","about.meta.currentlyAcross.label":"Currently across","about.meta.currentlyAcross.value":"Operations SaaS, product delivery for mobile games","about.meta.work.label":"Work","about.meta.work.value":"On-site, hybrid or remote. Driving licence available.","about.meta.based.label":"Based","about.meta.based.value":"Dammam, Saudi Arabia. Transferable Iqama, India citizen.","skills.businessAnalysis.label":"Business Analysis","skills.businessAnalysis.value":"Requirements Gathering, Process Analysis, Data Modeling, Solution Design, Gap Analysis, RBAC Requirements","skills.delivery.label":"Delivery & Stakeholders","skills.delivery.value":"Stakeholder Management, Phased Delivery Planning, Product Roadmapping, Agile/Scrum, Technical Specifications, Vendor Evaluation, Business Registration & Compliance, Organizational Design, Operational Efficiency","skills.data.label":"Data & Reporting","skills.data.value":"SQL, Power BI, Excel, Reporting, Data Import/Migration, PostgreSQL","skills.technical.label":"Technical Background","skills.technical.value":"Java, Spring Boot, Python, Node.js, REST API, Microservices, Multi-Tenant SaaS, Docker, CI/CD, Git, AWS/GCP","proof.network.label":"Clients and truck suppliers in the data model","proof.network.src":"Gulf Loads","proof.sales.fig":"500K → 1M SAR","proof.sales.label":"Monthly sales growth, doubling operational efficiency","proof.sales.src":"Gulf Loads","proof.rendering.label":"Fewer draw call batches, 3,000 → 81","proof.rendering.src":"Poly Overtake","proof.defects.fig":"Zero","proof.defects.label":"Critical defects after launch","proof.defects.src":"Poly Overtake","proof.issues.label":"Production issues root-caused","proof.issues.src":"MINE","proof.endpoints.label":"Spring Boot endpoints standardised","proof.endpoints.src":"MINE","proof.crash.label":"Crash detection accuracy, 1.5% false positives","proof.crash.src":"Crash Detection","proof.trajectory.label":"Trajectory ADE, vs. 3.55 m / 2.27 m baselines","proof.trajectory.src":"Vehicle Trajectory","experience.heading":"Experience","exp.gulfloads.when":"Jul 2026 – Present / Dammam (on-site)","exp.gulfloads.role":"Business Analyst","exp.gulfloads.org":"Gulf Loads","exp.gulfloads.bullet1":"Reviewed operational workflows across client onboarding, supplier sourcing, route assignment and load tracking, all run manually, then gathered requirements and translated freight coordination logic (multi-truck loads, trade routes, client-supplier relationships) into data models the team could actually use.","exp.gulfloads.bullet2":"Defined the phased delivery plan (internal admin-provisioned slice vs. self-service tenant signup slice) and the role-based access control / tenant-isolation requirements as the platform moved toward multi-tenant SaaS, and evaluated payment processor options for its billing model.","exp.gulfloads.bullet3":"Owns system architecture, data import/export standards and reporting requirements directly, writing the technical specs rather than handing them off to a separate engineering team.","exp.gulfloads.bullet4":"Built Excel-based import templates and entity relationship models to standardise how load, driver and route data is captured and migrated, covering a growing network of 14 clients and 38 truck suppliers.","exp.gulfloads.bullet5":"Helped scale Gulf Loads' monthly sales from 500,000 SAR to 1,000,000 SAR, doubling operational efficiency in the process.","exp.gulfloads.skills":"Requirements Gathering, Process Analysis, Data Modeling, Multi-Tenant SaaS, RBAC, Phased Delivery, Vendor Evaluation, Operational Efficiency, Excel","exp.aurelio.when":"Nov 2025 – Present / Remote","exp.aurelio.role":"Business Analyst","exp.aurelio.tag":"Founder","exp.aurelio.org":"Aurelio Game Studio","exp.aurelio.bullet1":"Founded the studio and built it from an idea into an active operation: strategy, product roadmaps and team structure across development, art and design, including business registration/compliance (UDYAM, MCA SPICe+ evaluation) and the founders' equity structure (DVR/SVR shares, ESOP, vesting).","exp.aurelio.bullet2":"Drove requirements and the UI/UX specification for a new mobile title, defining the full screen set needed to pass iOS/Play Store submission and ad-network approval, and coordinated design/UI contributors to deliver it.","exp.aurelio.bullet3":"Authored the studio's privacy policy and terms & conditions to generically cover current and future titles, and scoped a licensing opportunity to bring a third-party puzzle game to mobile.","exp.aurelio.bullet4":"Runs requirements gathering across developers, artists and designers, prioritises features against gameplay goals and release timelines, then assigns tasks and tracks deliverables to keep milestones on schedule.","exp.aurelio.bullet5":"Defined the requirements and performance targets behind Poly Overtake, shipped to Google Play with zero critical defects after launch.","exp.aurelio.bullet6":"Defined the studio's operating roles and handoff processes, then matched the right people to them, making the studio self-sustaining and able to run independently without day-to-day founder involvement.","exp.aurelio.skills":"Product Roadmapping, UI/UX Requirements, Store Compliance, Stakeholder Management, Business Registration & Compliance, Release Planning, Organizational Design","exp.mine.when":"Apr 2025 – Jan 2026 / Remote, USA","exp.mine.role":"Backend Support Engineer","exp.mine.tag":"Contract","exp.mine.org":"MINE","exp.mine.bullet1":"Traced and documented root causes for 18 recurring production backend issues, tracked fixes through Agile sprint cycles, and built automated API test pipelines in Java and Postman wired into the team's CI/CD workflow.","exp.mine.bullet2":"Defined API contract standards for 20 Spring Boot endpoints (request validation, response schemas, error handling), which cut support escalations, and worked Agile standups with frontend and QA to align contracts and catch mismatches before production.","exp.mine.skills":"API Contract Standards, Root Cause Analysis, Agile/Scrum, Spring Boot, Postman, CI/CD","exp.overlapNote":"Gulf Loads and Aurelio Game Studio both run to \"Present\"; the MINE contract ran alongside Aurelio Game Studio until January 2026. These are three concurrent tracks, not a sequential timeline.","projects.heading":"Projects","proj.mirfak.title":"Mirfak Ops · Gulf Loads","proj.mirfak.status":"Production · Internal","proj.mirfak.desc":"Multi-tenant operations and invoice management SaaS, built end to end, with Gulf Loads as its first tenant. No public link, internal platform.","proj.mirfak.stack":"React/Vite, Express, Prisma, PostgreSQL, Capacitor (Android), MapLibre","proj.mirfak.bullet1":"Multi-truck load tracking with client/supplier pricing, payment status and profit calculation","proj.mirfak.bullet2":"Drag-and-drop route builder with MapLibre visualisation for trade route planning","proj.mirfak.bullet3":"Excel import pipeline with fuzzy column matching and alias-driven entity merging to migrate legacy manual records","proj.mirfak.bullet4":"Server-side role-based permissions with tenant isolation enforced via a Prisma client extension","proj.mirfak.bullet5":"Bilingual (EN/AR) automated reminders for payment and delivery follow-ups","proj.mirfak.bullet6":"Automated cross-tenant test in CI to verify isolation holds","proj.poly.title":"Poly Overtake","proj.poly.linkText":"View on Google Play","proj.poly.desc":"Mobile racing game shipped to Google Play with zero critical defects after launch; requirements, UI/UX spec and store compliance owned end to end.","proj.poly.stack":"Requirements, UI/UX Spec, Store Compliance, Unity, C#, Google AdMob","proj.poly.bullet1":"Defined requirements and performance targets, tracked through to a zero-critical-defect launch","proj.poly.bullet2":"Specified the full screen set required to pass Play Store submission and ad-network approval","proj.poly.bullet3":"Diagnosed a rendering bottleneck and defined the fix that cut draw call batches from 3,000 to 81 (97% reduction)","proj.poly.bullet4":"Scoped AdMob/GPGS SDK integrations and OAuth flows as monetisation and sign-in requirements","proj.poly.bullet5":"Managed the Play Console release workflow: store listing, compliance, app-ads.txt, privacy messaging","proj.poly.bullet6":"Ran internal and closed testing phases before production release","proj.shorts.title":"YouTube Shorts Automation Uploader","proj.shorts.desc":"Fully automated AI pipeline for generating and uploading short-form video at scale.","proj.shorts.linkText":"View on GitHub","proj.shorts.stack":"Python, Groq LLM, ComfyUI, XTTS v2, FFmpeg, SQLite","proj.smartsearch.title":"Smart Search","proj.smartsearch.desc":"AI-powered semantic search POC with automatic editorial alignment scoring.","proj.smartsearch.stack":"Java, Spring Boot, Semantic Search, TF-IDF, REST APIs","proj.quiz.title":"Quiz Generator (Java)","proj.quiz.desc":"Java service that generates quizzes from articles using Groq's API.","proj.quiz.stack":"Java, Spring Boot, LLM Integration, Jackson, Maven","proj.trajectory.title":"Vehicle Trajectory Prediction","proj.trajectory.desc":"Data processing and modelling pipeline for short-term vehicle movement prediction.","proj.trajectory.stack":"Python, PyTorch, Scikit-Learn","proj.crash.title":"Crash Detection System","proj.crash.desc":"Accident detection pipeline with multiframe validation, cloud integration and real-time alerting.","proj.crash.stack":"Python, YOLOv8, OpenCV, Cloud APIs","proj.apishowcase.title":"API Development Showcase","proj.apishowcase.desc":"Collection of Spring Boot REST APIs demonstrating backend patterns. Multiple repositories, no single link.","proj.apishowcase.stack":"Spring Boot, REST APIs, Java, PostgreSQL","education.heading":"Education","education.when":"2021 – 2025","education.title":"B.Tech, Computer Science and Engineering","education.org":"Vellore Institute of Technology (VIT), Vellore, India","education.copy":"Coursework relevant to the current positioning: data structures, algorithms, database systems, distributed computing, software engineering, software architecture and system design: the technical base applied to data modelling, solution design and writing specs engineering teams can build from.","contact.heading":"Contact","contact.copy":"Open to Business Analyst, Product Analyst and Systems Analyst roles, on-site, hybrid or remote. Reach out directly or download the résumé for the full record.","contact.email":"sabubakerahmed@gmail.com","contact.phone.label":"Phone","contact.phone.value":"+966 57 281 7896","contact.linkedin.label":"LinkedIn","contact.linkedin.value":"linkedin.com/in/syed-abubaker-ahmed","contact.github.label":"GitHub","contact.github.value":"github.com/Syed-Abubaker-Ahmed","contact.resume.label":"Résumé","contact.resume.value":"Syed Abubaker Ahmed.pdf","footer.copyright":"© 2026 Syed Abubaker Ahmed."}, ar: {"meta.title":"Syed Abubaker Ahmed · محلل أعمال","meta.description":"Syed Abubaker Ahmed، محلل أعمال ذو خلفية في هندسة البرمجيات. المتطلبات، وتحليل العمليات، ونمذجة البيانات، وتخطيط التنفيذ، مدعومة بمواصفات تقنية عملية.","identity.name":"Syed Abubaker Ahmed","identity.role":"محلل أعمال","identity.blurb":"محلل أعمال ذو خلفية في هندسة البرمجيات، مقيم في الدمام، المملكة العربية السعودية.","nav.about":"نبذة","nav.experience":"الخبرة","nav.projects":"المشاريع","nav.contact":"التواصل","a11y.email":"البريد الإلكتروني","a11y.linkedin":"LinkedIn","a11y.github":"GitHub","a11y.resume":"تنزيل السيرة الذاتية","a11y.menuToggle":"تبديل القائمة","a11y.skipLink":"تخطي إلى المحتوى","hero.kicker":"محلل أعمال · محلل منتجات · محلل نظم","hero.headline":"Syed Abubaker Ahmed","hero.lede":"أتولى إدارة المتطلبات وتحليل العمليات ونمذجة البيانات وتخطيط التنفيذ، وأكتب المواصفات التقنية بنفسي بدلًا من تسليم المتطلبات إلى فريق هندسي منفصل.","hero.status":"الدمام، المملكة العربية السعودية · إقامة قابلة للنقل · حضوري، هجين، عن بُعد","hero.cta.contact":"تواصل معي","hero.cta.resume":"تنزيل السيرة الذاتية","hero.cta.projects":"عرض المشاريع","about.heading":"نبذة","about.p1":"المخطط وقواعد الوصول وخطة التنفيذ تأتي من الشخص نفسه الذي رسم العملية. وهذا هو العامل المميز وراء مسمى محلل الأعمال: خلفية هندسية تُوظَّف لخدمة التحليل، وليس العكس.","about.p2":"أعمل حاليًا في مجالين: منصة SaaS للعمليات تتجه نحو التنفيذ متعدد المستأجرين، وتسليم المنتجات لألعاب الهاتف المحمول بصفتي مؤسس استوديو صغير. كل مجال يمثل سياقًا لجهة عمل واحدة، وليس إطارًا للعمل نفسه.","about.p3":"كما ساعدت شركات ناشئة على التحول إلى أعمال فعّالة: Aurelio Game Studio، الذي أسسته وجعلته مستدامًا ذاتيًا من خلال تحديد أدواره التشغيلية وعمليات تسليم المهام ومواءمة الأشخاص المناسبين معها، بحيث يعمل الآن باستقلال عن تدخل المؤسس اليومي، وGulf Loads، التي ساعدت في نمو مبيعاتها الشهرية من 500,000 SAR إلى 1,000,000 SAR، مع مضاعفة الكفاءة التشغيلية في هذه العملية.","about.meta.targetRoles.label":"الوظائف المستهدفة","about.meta.targetRoles.value":"محلل أعمال، محلل منتجات، محلل نظم","about.meta.currentlyAcross.label":"أعمل حاليًا في","about.meta.currentlyAcross.value":"SaaS للعمليات، وتسليم منتجات ألعاب الهاتف المحمول","about.meta.work.label":"العمل","about.meta.work.value":"حضوري، هجين أو عن بُعد. رخصة قيادة متاحة.","about.meta.based.label":"الموقع","about.meta.based.value":"الدمام، المملكة العربية السعودية. إقامة قابلة للنقل، مواطن هندي.","skills.businessAnalysis.label":"تحليل الأعمال","skills.businessAnalysis.value":"Requirements Gathering, Process Analysis, Data Modeling, Solution Design, Gap Analysis, RBAC Requirements","skills.delivery.label":"التنفيذ وأصحاب المصلحة","skills.delivery.value":"Stakeholder Management, Phased Delivery Planning, Product Roadmapping, Agile/Scrum, Technical Specifications, Vendor Evaluation, Business Registration & Compliance, Organizational Design, Operational Efficiency","skills.data.label":"البيانات وإعداد التقارير","skills.data.value":"SQL, Power BI, Excel, إعداد التقارير, استيراد/ترحيل البيانات, PostgreSQL","skills.technical.label":"الخلفية التقنية","skills.technical.value":"Java, Spring Boot, Python, Node.js, REST API, الخدمات المصغرة, Multi-Tenant SaaS, Docker, CI/CD, Git, AWS/GCP","proof.network.label":"عملاء وموردو شاحنات في نموذج البيانات","proof.network.src":"Gulf Loads","proof.sales.fig":"500K → 1M SAR","proof.sales.label":"نمو المبيعات الشهرية، مضاعفة الكفاءة التشغيلية","proof.sales.src":"Gulf Loads","proof.rendering.label":"دفعات استدعاءات رسم أقل، من 3,000 إلى 81","proof.rendering.src":"Poly Overtake","proof.defects.fig":"صفر","proof.defects.label":"أخطاء حرجة بعد الإطلاق","proof.defects.src":"Poly Overtake","proof.issues.label":"مشكلات إنتاج تم تحديد أسبابها الجذرية","proof.issues.src":"MINE","proof.endpoints.label":"نقاط نهاية Spring Boot موحّدة قياسيًا","proof.endpoints.src":"MINE","proof.crash.label":"دقة كشف الحوادث، 1.5% إيجابيات كاذبة","proof.crash.src":"Crash Detection","proof.trajectory.label":"متوسط خطأ المسار (ADE)، مقارنة بخطي الأساس 3.55 م / 2.27 م","proof.trajectory.src":"Vehicle Trajectory","experience.heading":"الخبرة","exp.gulfloads.when":"يوليو 2026 – حتى الآن / الدمام (حضوري)","exp.gulfloads.role":"محلل أعمال","exp.gulfloads.org":"Gulf Loads","exp.gulfloads.bullet1":"راجعت سير العمل التشغيلي عبر تأهيل العملاء، واستقطاب الموردين، وتعيين المسارات، وتتبع الحمولات، وجميعها تُدار يدويًا، ثم جمعت المتطلبات وحوّلت منطق تنسيق الشحن (الحمولات متعددة الشاحنات، ومسارات التجارة، والعلاقات بين العملاء والموردين) إلى نماذج بيانات يمكن للفريق استخدامها فعليًا.","exp.gulfloads.bullet2":"حددت خطة التنفيذ المرحلية (جزء يتم تهيئته داخليًا بواسطة المشرف مقابل جزء لتسجيل المستأجر ذاتيًا) ومتطلبات التحكم في الوصول القائم على الأدوار / عزل المستأجرين مع انتقال المنصة نحو SaaS متعدد المستأجرين، وقيّمت خيارات معالجات الدفع لنموذج الفوترة.","exp.gulfloads.bullet3":"أتولى مباشرةً بنية النظام ومعايير استيراد/تصدير البيانات ومتطلبات إعداد التقارير، وأكتب المواصفات التقنية بدلًا من تسليمها إلى فريق هندسي منفصل.","exp.gulfloads.bullet4":"أنشأت قوالب استيراد مبنية على Excel ونماذج لعلاقات الكيانات لتوحيد طريقة التقاط وترحيل بيانات الحمولات والسائقين والمسارات، لتغطية شبكة متنامية تضم 14 عميلًا و38 موردًا للشاحنات.","exp.gulfloads.bullet5":"ساعدت في زيادة المبيعات الشهرية لـ Gulf Loads من 500,000 SAR إلى 1,000,000 SAR، مع مضاعفة الكفاءة التشغيلية في هذه العملية.","exp.gulfloads.skills":"Requirements Gathering, Process Analysis, Data Modeling, Multi-Tenant SaaS, RBAC, Phased Delivery, Vendor Evaluation, Operational Efficiency, Excel","exp.aurelio.when":"نوفمبر 2025 – حتى الآن / عن بُعد","exp.aurelio.role":"محلل أعمال","exp.aurelio.tag":"مؤسس","exp.aurelio.org":"Aurelio Game Studio","exp.aurelio.bullet1":"أسست الاستوديو وحولته من فكرة إلى نشاط فعّال: الاستراتيجية، وخرائط طريق المنتجات، وهيكل الفريق عبر التطوير والفن والتصميم، بما في ذلك تسجيل الأعمال/الامتثال (تقييم UDYAM وMCA SPICe+) وهيكل ملكية المؤسسين (أسهم DVR/SVR وESOP والاستحقاق).","exp.aurelio.bullet2":"قدت المتطلبات ومواصفات UI/UX لعنوان جديد للهواتف المحمولة، وحددت مجموعة الشاشات الكاملة اللازمة لاجتياز تقديم iOS/Play Store والموافقة من شبكات الإعلانات، ونسقت مع مساهمي التصميم وواجهة المستخدم لتنفيذها.","exp.aurelio.bullet3":"أعددت سياسة الخصوصية والشروط والأحكام الخاصة بالاستوديو لتغطي العناوين الحالية والمستقبلية بصورة عامة، وحددت نطاق فرصة ترخيص لنقل لعبة ألغاز من طرف ثالث إلى الهواتف المحمولة.","exp.aurelio.bullet4":"أدير جمع المتطلبات عبر المطورين والفنانين والمصممين، وأرتب أولويات الميزات وفق أهداف أسلوب اللعب والجداول الزمنية للإصدار، ثم أسند المهام وأتابع المخرجات للحفاظ على المراحل ضمن الجدول.","exp.aurelio.bullet5":"حددت المتطلبات وأهداف الأداء وراء Poly Overtake، وتم إطلاقها على Google Play دون أي أخطاء حرجة بعد الإطلاق.","exp.aurelio.bullet6":"حددت الأدوار التشغيلية للاستوديو وعمليات تسليم المهام، ثم طابقت الأشخاص المناسبين معها، مما جعل الاستوديو مستدامًا ذاتيًا وقادرًا على العمل باستقلال دون تدخل المؤسس اليومي.","exp.aurelio.skills":"Product Roadmapping, UI/UX Requirements, Store Compliance, Stakeholder Management, Business Registration & Compliance, Release Planning, Organizational Design","exp.mine.when":"أبريل 2025 – يناير 2026 / عن بُعد، الولايات المتحدة الأمريكية","exp.mine.role":"مهندس دعم الواجهة الخلفية","exp.mine.tag":"عقد","exp.mine.org":"MINE","exp.mine.bullet1":"تتبعت ووثقت الأسباب الجذرية لـ 18 مشكلة متكررة في الواجهة الخلفية للإنتاج، وتابعت الإصلاحات عبر دورات Sprint في Agile، وأنشأت خطوط اختبار API آلية باستخدام Java وPostman مرتبطة بسير عمل CI/CD للفريق.","exp.mine.bullet2":"حددت معايير عقود API لـ 20 نقطة نهاية في Spring Boot (التحقق من الطلبات، ومخططات الاستجابات، ومعالجة الأخطاء)، مما قلل تصعيدات الدعم، وعملت في اجتماعات Agile اليومية مع الواجهة الأمامية وQA لمواءمة العقود واكتشاف حالات عدم التطابق قبل الإنتاج.","exp.mine.skills":"API Contract Standards, Root Cause Analysis, Agile/Scrum, Spring Boot, Postman, CI/CD","exp.overlapNote":"يستمر كل من Gulf Loads وAurelio Game Studio حتى «الوقت الحاضر»؛ وقد تزامن عقد MINE مع Aurelio Game Studio حتى يناير 2026. هذه ثلاثة مسارات متزامنة وليست خطًا زمنيًا متسلسلًا.","projects.heading":"المشاريع","proj.mirfak.title":"Mirfak Ops · Gulf Loads","proj.mirfak.status":"الإنتاج · داخلي","proj.mirfak.desc":"منصة SaaS متعددة المستأجرين لإدارة العمليات والفواتير، بُنيت من البداية إلى النهاية، وكانت Gulf Loads أول مستأجر لها. لا يوجد رابط عام؛ المنصة داخلية.","proj.mirfak.stack":"React/Vite, Express, Prisma, PostgreSQL, Capacitor (Android), MapLibre","proj.mirfak.bullet1":"تتبع الحمولات متعددة الشاحنات مع تسعير العملاء/الموردين وحالة الدفع وحساب الأرباح","proj.mirfak.bullet2":"منشئ مسارات بالسحب والإفلات مع تصور باستخدام MapLibre لتخطيط مسارات التجارة","proj.mirfak.bullet3":"خط أنابيب لاستيراد Excel مع مطابقة مرنة للأعمدة ودمج للكيانات قائم على الأسماء البديلة لترحيل السجلات اليدوية القديمة","proj.mirfak.bullet4":"صلاحيات قائمة على الأدوار من جهة الخادم مع فرض عزل المستأجرين عبر امتداد عميل Prisma","proj.mirfak.bullet5":"تذكيرات آلية ثنائية اللغة (EN/AR) لمتابعة الدفع والتسليم","proj.mirfak.bullet6":"اختبار آلي بين المستأجرين ضمن CI للتحقق من استمرار العزل","proj.poly.title":"Poly Overtake","proj.poly.linkText":"عرض على Google Play","proj.poly.desc":"لعبة سباق للهواتف المحمولة أُطلقت على Google Play دون أي أخطاء حرجة بعد الإطلاق؛ مع تولي المتطلبات ومواصفات UI/UX والامتثال للمتجر من البداية إلى النهاية.","proj.poly.stack":"Requirements, UI/UX Spec, Store Compliance, Unity, C#, Google AdMob","proj.poly.bullet1":"حددت المتطلبات وأهداف الأداء، وتابعتها حتى إطلاق دون أخطاء حرجة","proj.poly.bullet2":"حددت مجموعة الشاشات الكاملة المطلوبة لاجتياز تقديم Play Store والموافقة من شبكة الإعلانات","proj.poly.bullet3":"شخّصت عنق زجاجة في التصيير وحددت الإصلاح الذي خفّض دفعات استدعاءات الرسم من 3,000 إلى 81 (انخفاض بنسبة 97%)","proj.poly.bullet4":"حددت نطاق تكاملات AdMob/GPGS SDK وتدفقات OAuth كمتطلبات لتحقيق الدخل وتسجيل الدخول","proj.poly.bullet5":"أدرت سير عمل الإصدار في Play Console: إدراج المتجر، والامتثال، وapp-ads.txt، ورسائل الخصوصية","proj.poly.bullet6":"أدرت مراحل الاختبار الداخلي والمغلق قبل الإصدار الإنتاجي","proj.shorts.title":"YouTube Shorts Automation Uploader","proj.shorts.desc":"خط أنابيب آلي بالكامل بالذكاء الاصطناعي لإنشاء وتحميل مقاطع الفيديو القصيرة على نطاق واسع.","proj.shorts.linkText":"عرض على GitHub","proj.shorts.stack":"Python, Groq LLM, ComfyUI, XTTS v2, FFmpeg, SQLite","proj.smartsearch.title":"Smart Search","proj.smartsearch.desc":"نموذج إثبات مفهوم للبحث الدلالي المدعوم بالذكاء الاصطناعي مع تقييم آلي للمواءمة التحريرية.","proj.smartsearch.stack":"Java, Spring Boot, Semantic Search, TF-IDF, REST APIs","proj.quiz.title":"Quiz Generator (Java)","proj.quiz.desc":"خدمة Java تنشئ اختبارات قصيرة من المقالات باستخدام واجهة Groq البرمجية.","proj.quiz.stack":"Java, Spring Boot, LLM Integration, Jackson, Maven","proj.trajectory.title":"Vehicle Trajectory Prediction","proj.trajectory.desc":"خط أنابيب لمعالجة البيانات ونمذجتها للتنبؤ قصير المدى بحركة المركبات.","proj.trajectory.stack":"Python, PyTorch, Scikit-Learn","proj.crash.title":"Crash Detection System","proj.crash.desc":"خط أنابيب لاكتشاف الحوادث مع التحقق متعدد الإطارات والتكامل السحابي والتنبيهات الفورية.","proj.crash.stack":"Python, YOLOv8, OpenCV, Cloud APIs","proj.apishowcase.title":"API Development Showcase","proj.apishowcase.desc":"مجموعة من REST APIs باستخدام Spring Boot توضح أنماط الواجهة الخلفية. مستودعات متعددة، ولا يوجد رابط واحد.","proj.apishowcase.stack":"Spring Boot, REST APIs, Java, PostgreSQL","education.heading":"التعليم","education.when":"2021 – 2025","education.title":"B.Tech، علوم وهندسة الحاسوب","education.org":"Vellore Institute of Technology (VIT), Vellore, India","education.copy":"المقررات ذات الصلة بالتموضع المهني الحالي: هياكل البيانات، والخوارزميات، وأنظمة قواعد البيانات، والحوسبة الموزعة، وهندسة البرمجيات، ومعمارية البرمجيات، وتصميم الأنظمة؛ وهي الأساس التقني المطبق في نمذجة البيانات وتصميم الحلول وكتابة المواصفات التي يمكن للفرق الهندسية البناء عليها.","contact.heading":"التواصل","contact.copy":"منفتح على وظائف محلل أعمال ومحلل منتجات ومحلل نظم، حضوريًا أو بنظام هجين أو عن بُعد. تواصل معي مباشرة أو نزّل السيرة الذاتية للاطلاع على السجل الكامل.","contact.email":"sabubakerahmed@gmail.com","contact.phone.label":"الهاتف","contact.phone.value":"+966 57 281 7896","contact.linkedin.label":"LinkedIn","contact.linkedin.value":"linkedin.com/in/syed-abubaker-ahmed","contact.github.label":"GitHub","contact.github.value":"github.com/Syed-Abubaker-Ahmed","contact.resume.label":"السيرة الذاتية","contact.resume.value":"Syed Abubaker Ahmed.pdf","footer.copyright":"© 2026 Syed Abubaker Ahmed."} };
+  var toggles = [document.getElementById('langToggle'), document.getElementById('langToggleMobile')].filter(Boolean);
+  var metaDesc = document.getElementById('metaDescription');
+  if(!toggles.length) return;
+
+  function applyLang(lang){
+    var dict = I18N[lang] || I18N.en;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      var key = el.getAttribute('data-i18n');
+      var val = dict[key];
+      if(val == null) return;
+      if(el.getAttribute('data-i18n-html') === 'br'){
+        el.innerHTML = val.split(' / ').join('<br>');
+      } else {
+        el.textContent = val;
+      }
+    });
+    document.querySelectorAll('[data-i18n-aria]').forEach(function(el){
+      var key = el.getAttribute('data-i18n-aria');
+      var val = dict[key];
+      if(val != null) el.setAttribute('aria-label', val);
+    });
+
+    if(dict['meta.title']) document.title = dict['meta.title'];
+    if(metaDesc && dict['meta.description']) metaDesc.setAttribute('content', dict['meta.description']);
+
+    toggles.forEach(function(btn){ btn.textContent = lang === 'ar' ? 'English' : '\u0627\u0644\u0639\u0631\u0628\u064a\u0629'; });
+
+    try { localStorage.setItem('lang', lang); } catch(e){}
+  }
+
+  toggles.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var current = document.documentElement.lang === 'ar' ? 'ar' : 'en';
+      applyLang(current === 'ar' ? 'en' : 'ar');
+    });
+  });
+
+  var saved = null;
+  try { saved = localStorage.getItem('lang'); } catch(e){}
+  applyLang(saved === 'ar' ? 'ar' : 'en');
 })();
 </script>
 
